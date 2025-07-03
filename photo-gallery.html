@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的相片集</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #336699;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .gallery {
+      max-width: 1200px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.02);
+    }
+
+    .pagination {
+      text-align: center;
+      margin: 2rem;
+    }
+
+    .pagination a {
+      display: inline-block;
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #336699;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .pagination a:hover {
+      background-color: #274d73;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>我的相片集</h1>
+  </header>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div class="pagination" id="pagination"></div>
+
+  <script>
+    const IMAGES_PER_PAGE = 50;
+    const gallery = document.getElementById('gallery');
+    const pagination = document.getElementById('pagination');
+
+    // 取得 ?page= 參數
+    const params = new URLSearchParams(window.location.search);
+    let page = parseInt(params.get('page')) || 1;
+
+    fetch('photo-list.json')
+      .then(response => response.json())
+      .then(data => {
+        const totalImages = data.length;
+        const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
+
+        // 限制 page 在合理範圍
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+
+        const startIndex = (page - 1) * IMAGES_PER_PAGE;
+        const endIndex = startIndex + IMAGES_PER_PAGE;
+        const imagesToShow = data.slice(startIndex, endIndex);
+
+        // 顯示圖片
+        imagesToShow.forEach(item => {
+          const img = document.createElement('img');
+          img.src = item.filename;
+          img.alt = "photo";
+          gallery.appendChild(img);
+        });
+
+        // 建立分頁按鈕
+        if (totalPages > 1) {
+          if (page > 1) {
+            const prev = document.createElement('a');
+            prev.href = `?page=${page - 1}`;
+            prev.textContent = '上一頁';
+            pagination.appendChild(prev);
+          }
+
+          if (page < totalPages) {
+            const next = document.createElement('a');
+            next.href = `?page=${page + 1}`;
+            next.textContent = '下一頁';
+            pagination.appendChild(next);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('讀取 JSON 發生錯誤:', error);
+        gallery.innerHTML = "<p>抱歉，無法載入相片清單。</p>";
+      });
+  </script>
+</body>
+</html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>吉米與他的貓貓小窩</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <style>
     body {
       margin: 0;
@@ -14,7 +15,7 @@
 
     header {
       background-color: #fff;
-      padding: 2rem 1rem;
+      padding: 1rem 0.5rem;
       text-align: center;
       border-bottom: 1px solid #ddd;
       position: sticky;
@@ -24,7 +25,7 @@
 
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 1.5rem;
       color: #336699;
     }
 
@@ -38,15 +39,16 @@
       background-color: #336699;
       color: #fff;
       text-align: center;
-      padding: 4rem 1rem;
+      padding: 0.5rem 1rem;
       border-radius: 8px;
       margin-bottom: 2rem;
     }
 
     .hero h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
     }
+
     .hero img {
         max-width: 100%;
         height: auto;
@@ -98,6 +100,56 @@
     .button-link:hover {
       background-color: #274d73;
     }
+    /* 新增 Slider 的改版設計 */
+    .slider {
+      position: relative;
+      width: 90%;                 /* 在大螢幕保留邊距 */
+      max-width: 1200px;
+      height: 80vh;               /* 主要改這裡：高度吃掉80%的視窗 */
+      margin: 1rem auto;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      height: 100%;
+    }
+
+    .slides img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;         /* 核心設定：cover → 不變形、裁中間 */
+      flex-shrink: 0;
+    }
+
+    .slider-nav {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .slider-nav button {
+      background-color: #fff;
+      border: 1px solid #336699;
+      width: 10px;
+      height: 10px;
+      margin: 0 4px;
+      border-radius: 50%;
+      padding: 0;
+      cursor: pointer;
+      transition: background-color 0.3s, border 0.3s;
+    }
+
+    .slider-nav button:hover {
+      background-color: #0f0d85;
+    }
+
+    .slider-nav button.active {
+      background-color: #0f0d85;
+    }
+    
   </style>
 </head>
 <body>
@@ -105,11 +157,20 @@
     <h1>吉米與他的貓貓小窩</h1>
   </header>
 
-  <section class="hero">
+  <!-- <section class="hero">
     <h2>近期熱門文章 / 最新相簿</h2>
     <img src="IMG_0006 2.jpg" alt="波波睡覺真可愛">
     <p>歡慶波波-2023/10月生日</p>
+  </section> -->
+  <section class="hero">
+    <!-- <h2>近期相簿 / 影片精選</h2> -->
+    <div class="slider" id="slider">
+      <div class="slides" id="slides"></div>
+    </div>
+    <div class="slider-nav" id="slider-nav"></div>
+    <a class="button-link" href="photo-gallery.html">前往相片集</a>
   </section>
+
 
   <section>
     <h2>近期文章</h2>
@@ -140,7 +201,66 @@
       </div>
       <!-- 也可以繼續複製 -->
     </div>
-    <a class="button-link" href="media.html">前往影音列表</a>
+    <a class="button-link" href="photo-gallery.html">前往影音列表</a>
   </section>
+
+<script>
+const slider = document.getElementById('slider');
+const slidesContainer = document.getElementById('slides');
+const navContainer = document.getElementById('slider-nav');
+let currentIndex = 0;
+let slides = [];
+
+fetch('photo-list.json')
+  .then(res => res.json())
+  .then(data => {
+    // 取時間最近的6張
+    const recentPhotos = data.slice(0, 6);
+    slides = recentPhotos;
+
+    // 產生幻燈片
+    recentPhotos.forEach(item => {
+      const img = document.createElement('img');
+      img.src = item.filename;
+      img.alt = '近期相簿';
+      slidesContainer.appendChild(img);
+    });
+
+    createNavButtons();
+    startSlideShow();
+  })
+  .catch(err => {
+    console.error('載入 photo-list.json 失敗:', err);
+    slidesContainer.innerHTML = '<p>無法載入相片</p>';
+  });
+
+function createNavButtons() {
+  for (let i = 0; i < slides.length; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = "";
+    btn.addEventListener('click', () => showSlide(i));
+    navContainer.appendChild(btn);
+  }
+}
+
+function showSlide(index) {
+  if (index < 0) index = slides.length - 1;
+  if (index >= slides.length) index = 0;
+  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+  currentIndex = index;
+  // 標記目前按鈕
+  const buttons = navContainer.querySelectorAll('button');
+  buttons.forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+}
+
+function startSlideShow() {
+  setInterval(() => {
+    showSlide((currentIndex + 1) % slides.length);
+  }, 3000);
+}
+</script>
+
 </body>
 </html>
