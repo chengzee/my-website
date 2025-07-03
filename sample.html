@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>吉米與他的貓貓小窩</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+
+    header {
+      background-color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #336699;
+    }
+
+    section {
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background-color: #336699;
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+    .hero img {
+        max-width: 100%;
+        height: auto;
+        margin: 1rem 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card img {
+      max-width: 100%;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+      color: #336699;
+    }
+
+    .button-link {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #336699;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .button-link:hover {
+      background-color: #274d73;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>吉米與他的貓貓小窩</h1>
+  </header>
+
+  <section class="hero">
+    <h2>近期熱門文章 / 最新相簿</h2>
+    <img src="IMG_0006 2.jpg" alt="波波睡覺真可愛">
+    <p>歡慶波波-2023/10月生日</p>
+  </section>
+
+  <section>
+    <h2>近期文章</h2>
+    <div class="cards">
+      <!-- 重複10次的範例卡片 -->
+      <div class="card">
+        <img src="IMG_0807.JPG" alt="窩的最愛">
+        <h3>世上只有波波好</h3>
+        <p>天使的臉孔、魔鬼的身材...</p>
+      </div>
+      <!-- 你可以繼續複製更多 -->
+    </div>
+    <a class="button-link" href="articles.html">前往文章列表</a>
+  </section>
+
+  <section>
+    <h2>近期相簿 / 影片</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="IMG_0762.JPG" alt="米米睿智的眼神">
+        <h3>你也想被米米眼神魅惑嗎？</h3>
+        <p>歡慶米米-2024/05生日</p>
+      </div>
+      <div class="card">
+        <img src="IMG_1750.jpg" alt="豆豆睏倒">
+        <h3>我再睡一下...</h3>
+        <p>歡慶豆豆-2024/05生日</p>
+      </div>
+      <!-- 也可以繼續複製 -->
+    </div>
+    <a class="button-link" href="media.html">前往影音列表</a>
+  </section>
+</body>
+</html>
