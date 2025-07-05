@@ -66,11 +66,37 @@
     .pagination a:hover {
       background-color: #274d73;
     }
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      z-index: 10;
+      transition: background-color 0.3s, color 0.3s;
+      background-color: transparent;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    }
+    header.scrolled {
+      /* background-color: #fff; */
+      background-color: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid #ddd;
+      color: #336699;
+      text-shadow: none;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      transition: color 0.3s;
+    }
+
   </style>
 </head>
 <body>
-  <header>
-    <h1>我的相片集</h1>
+  <header id="page-header">
+    <h1>吉米與他的貓貓小窩</h1>
   </header>
 
   <div class="gallery" id="gallery"></div>
@@ -78,6 +104,14 @@
   <div class="pagination" id="pagination"></div>
 
   <script>
+    const header = document.getElementById('page-header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+        } else {
+        header.classList.remove('scrolled');
+        }
+    });
     const IMAGES_PER_PAGE = 50;
     const gallery = document.getElementById('gallery');
     const pagination = document.getElementById('pagination');

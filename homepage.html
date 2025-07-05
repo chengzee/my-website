@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>吉米與他的貓貓小窩</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+     body, html {
+      width: 100%;
+      height: 100%;
+    }
+
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card img {
+      max-width: 100%;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+      color: #336699;
+    }
+
+
+    /* --- Other Sections --- */
+    /* section {
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    } */
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      z-index: 10;
+      transition: background-color 0.3s, color 0.3s;
+      background-color: transparent;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    }
+    header.scrolled {
+      /* background-color: #fff; */
+      background-color: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid #ddd;
+      color: #336699;
+      text-shadow: none;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      transition: color 0.3s;
+    }
+
+    .hero {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    .slider {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 1.5s linear;
+    }
+    .slide-item {
+      flex: 0 0 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    .slide-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .slider-nav {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+    }
+    .slider-nav button {
+      background-color: rgba(255, 255, 255, 0.7);
+      border: none;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .slider-nav button.active {
+      background-color: #336699;
+    }
+
+    .hero-caption {
+      width: 100%;
+      background-color: #fff;
+      padding: 1rem 2rem;
+      text-align: right;
+    }
+    .button-link {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #336699;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    .button-link:hover {
+      background-color: #274d73;
+    }
+
+    section:not(.hero):not(.hero-caption) {
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- <section class="hero">
+    <h2>近期熱門文章 / 最新相簿</h2>
+    <img src="IMG_0006 2.jpg" alt="波波睡覺真可愛">
+    <p>歡慶波波-2023/10月生日</p>
+  </section> -->
+  <header id="page-header">
+    <h1>吉米與他的貓貓小窩</h1>
+  </header>
+
+  <section class="hero">
+    <div class="slider">
+      <div class="slides" id="slides"></div>
+      <div class="slider-nav" id="slider-nav"></div>
+    </div>
+  </section>
+
+  <section class="hero-caption">
+    <a class="button-link" href="photo-gallery.html">前往相片集</a>
+  </section>
+
+
+  <section>
+    <h2>近期文章</h2>
+    <div class="cards">
+      <!-- 重複10次的範例卡片 -->
+      <div class="card">
+        <img src="IMG_0807.JPG" alt="窩的最愛">
+        <h3>世上只有波波好</h3>
+        <p>天使的臉孔、魔鬼的身材...</p>
+      </div>
+      <!-- 你可以繼續複製更多 -->
+    </div>
+    <a class="button-link" href="articles.html">前往文章列表</a>
+  </section>
+
+  <section>
+    <h2>近期相簿 / 影片</h2>
+    <div class="cards">
+      <div class="card">
+        <img src="IMG_0762.JPG" alt="米米睿智的眼神">
+        <h3>你也想被米米眼神魅惑嗎？</h3>
+        <p>歡慶米米-2024/05生日</p>
+      </div>
+      <div class="card">
+        <img src="IMG_1750.jpg" alt="豆豆睏倒">
+        <h3>我再睡一下...</h3>
+        <p>歡慶豆豆-2024/05生日</p>
+      </div>
+      <!-- 也可以繼續複製 -->
+    </div>
+    <a class="button-link" href="photo-gallery.html">前往影音列表</a>
+  </section>
+
+  <script>
+    // Header scroll 背景
+    const header = document.getElementById('page-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    
+    const slidesContainer = document.getElementById('slides');
+    const navContainer = document.getElementById('slider-nav');
+    let slides = [];
+    let currentIndex = 1;
+    let autoplayInterval;
+
+    fetch('photo-list.json')
+      .then(res => res.json())
+      .then(data => {
+        if (data.length === 0) return;
+        slides = data.slice(0, 6);
+
+        // Create clones for infinite loop
+        const firstClone = { filename: slides[0].filename };
+        const lastClone = { filename: slides[slides.length - 1].filename };
+        const allSlides = [lastClone, ...slides, firstClone];
+
+        allSlides.forEach(item => {
+          const slide = document.createElement('div');
+          slide.classList.add('slide-item');
+          const img = document.createElement('img');
+          img.src = item.filename;
+          img.alt = '近期相片';
+          slide.appendChild(img);
+          slidesContainer.appendChild(slide);
+        });
+
+        // Nav dots
+        for (let i = 0; i < slides.length; i++) {
+          const btn = document.createElement('button');
+          btn.addEventListener('click', () => {
+            stopAutoplay();
+            goToSlide(i + 1);
+            startAutoplay();
+          });
+          navContainer.appendChild(btn);
+        }
+
+        slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
+        updateNav();
+
+        startAutoplay();
+      });
+
+    function goToSlide(index) {
+      slidesContainer.style.transition = 'transform 0.9s linear';
+      currentIndex = index;
+      slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
+      updateNav();
+    }
+
+    function startAutoplay() {
+      autoplayInterval = setInterval(() => {
+        goToSlide(currentIndex + 1);
+      }, 4000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
+    }
+
+    slidesContainer?.addEventListener('transitionend', () => {
+      const childrenCount = slidesContainer.children.length;
+      if (currentIndex === childrenCount - 1) {
+        slidesContainer.style.transition = 'none';
+        currentIndex = 1;
+        slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
+      } else if (currentIndex === 0) {
+        slidesContainer.style.transition = 'none';
+        currentIndex = slidesContainer.children.length - 2;
+        slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
+      }
+    });
+
+    function updateNav() {
+      const buttons = document.querySelectorAll('#slider-nav button');
+      buttons.forEach((btn, i) => {
+        btn.classList.toggle('active', i === currentIndex - 1);
+      });
+    }
+  </script>
+
+</body>
+</html>
