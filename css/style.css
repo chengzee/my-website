@@ -470,6 +470,72 @@ body.page-hero .site-header.scrolled {
   color: #666;
 }
 
+/* 貓咪一列式排版 */
+.cat-profiles {
+  margin: 1.5rem 0;
+}
+
+.cat-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cat-row:last-child {
+  border-bottom: none;
+}
+
+.cat-row img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.cat-info h3 {
+  font-size: 1.25rem;
+  color: #336699;
+  margin-bottom: 0.25rem;
+}
+
+.cat-info p {
+  margin-bottom: 0.2rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* IG 連結 + Icon */
+.ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #7fb3d8;
+  transition: color 0.3s;
+}
+
+.ig-link:hover {
+  color: #fff;
+}
+
+.about-content .ig-link {
+  color: #336699;
+  font-size: 1.05rem;
+}
+
+.about-content .ig-link:hover {
+  color: #274d73;
+}
+
+.ig-icon {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: middle;
+}
+
 
 /* ============================
    404 Error Page
@@ -587,6 +653,15 @@ body.page-hero .site-header.scrolled {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .cat-row {
+    gap: 1rem;
+  }
+
+  .cat-row img {
+    width: 90px;
+    height: 90px;
+  }
+
   .about-content {
     margin-top: 4.5rem;
     padding: 1.5rem 1rem;
@@ -604,6 +679,17 @@ body.page-hero .site-header.scrolled {
 @media (max-width: 480px) {
   .cat-gallery {
     grid-template-columns: 1fr;
+  }
+
+  .cat-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .cat-row img {
+    width: 100px;
+    height: 100px;
   }
 
   .gallery {

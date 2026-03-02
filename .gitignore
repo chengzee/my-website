@@ -11,9 +11,13 @@ converted_images/
 # 備份檔
 *.bak
 
+# 根目錄遺留圖片（圖片統一放 photos/）
+/IMG_*
+
 # 編輯器
 *.code-workspace
 .vscode/
 
-# 暫停使用的腳本
+# 暫停使用的腳本與舊版頁面
 (暫停使用)*
+homepage_sample.html
