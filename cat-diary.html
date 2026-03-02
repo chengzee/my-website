@@ -29,10 +29,19 @@
 
   <!-- Main Content -->
   <main class="section" style="margin-top: 5rem;">
-    <h2>🍽 飲食日記</h2>
+    <div class="diary-title-bar">
+      <h2>🍽 飲食日記</h2>
+      <div id="admin-bar">
+        <button class="btn-admin-login" id="btn-login" onclick="adminLogin()">🔐 管理員登入</button>
+        <div class="admin-status" id="admin-status" style="display:none;">
+          <span>✅ 管理模式</span>
+          <button class="btn-admin-logout" onclick="adminLogout()">登出</button>
+        </div>
+      </div>
+    </div>
 
-    <!-- 新增紀錄表單 -->
-    <div class="diary-form-card">
+    <!-- 新增紀錄表單（管理員限定） -->
+    <div class="diary-form-card admin-only">
       <h3>📝 新增紀錄</h3>
       <form id="diary-form" class="diary-form">
         <div class="form-row">
@@ -111,7 +120,7 @@
           <option value="其他">其他</option>
         </select>
       </div>
-      <div class="data-actions">
+      <div class="data-actions admin-only">
         <button class="btn-secondary" id="btn-export" title="匯出資料">📤 匯出</button>
         <button class="btn-secondary" id="btn-import" title="匯入資料">📥 匯入</button>
         <input type="file" id="import-file" accept=".json" style="display:none;" />
@@ -143,14 +152,14 @@
               <th>食物</th>
               <th>份量</th>
               <th>備註</th>
-              <th>操作</th>
+              <th class="admin-only-cell">操作</th>
             </tr>
           </thead>
           <tbody id="diary-tbody">
           </tbody>
         </table>
       </div>
-      <p class="empty-message" id="empty-msg" style="display:none;">目前沒有紀錄，快來新增第一筆吧！🐱</p>
+      <p class="empty-message" id="empty-msg" style="display:none;">目前沒有飲食紀錄 🐱</p>
     </div>
 
   </main>
@@ -167,6 +176,12 @@
     // 飲食日記 - localStorage 互動系統
     // ============================
     const STORAGE_KEY = 'catDiaryRecords';
+    const ADMIN_SESSION_KEY = 'catDiaryAdmin';
+    // SHA-256 of admin password（預設：jimmy2026）
+    // 修改密碼：在 console 執行
+    // crypto.subtle.digest('SHA-256', new TextEncoder().encode('你的新密碼')).then(h=>console.log([...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('')))
+    const ADMIN_HASH = '17f8fef651da2af9f1d8e6965bff2ed78f587a19fc9e7fd054fd5d2075d901a1';
+
     const CAT_COLORS = {
       '波波': '#FF6B6B',
       '米米': '#4ECDC4',
@@ -179,6 +194,44 @@
 
     let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     let chart = null;
+    let isAdmin = sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
+
+    // --- 管理員登入/登出 ---
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function adminLogin() {
+      const pw = prompt('請輸入管理員密碼：');
+      if (!pw) return;
+      const hash = await sha256(pw);
+      if (hash === ADMIN_HASH) {
+        isAdmin = true;
+        sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+        applyAdminMode();
+        saveAndRender();
+      } else {
+        alert('❌ 密碼錯誤');
+      }
+    }
+
+    function adminLogout() {
+      isAdmin = false;
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      applyAdminMode();
+      saveAndRender();
+    }
+
+    function applyAdminMode() {
+      if (isAdmin) {
+        document.body.classList.remove('visitor-mode');
+      } else {
+        document.body.classList.add('visitor-mode');
+      }
+      document.getElementById('btn-login').style.display = isAdmin ? 'none' : '';
+      document.getElementById('admin-status').style.display = isAdmin ? 'flex' : 'none';
+    }
 
     // --- 初始化日期時間 ---
     const now = new Date();
@@ -262,7 +315,7 @@
           <td>${r.food}</td>
           <td>${r.amount !== '—' ? r.amount + 'g' : '—'}</td>
           <td>${r.note}</td>
-          <td><button class="btn-delete" onclick="deleteRecord(${r.id})">🗑</button></td>
+          <td class="admin-only-cell"><button class="btn-delete" onclick="deleteRecord(${r.id})">🗑</button></td>
         </tr>
       `).join('');
     }
@@ -385,7 +438,8 @@
       e.target.value = '';
     });
 
-    // --- 初始渲染 ---
+    // --- 初始化管理模式 & 渲染 ---
+    applyAdminMode();
     saveAndRender();
   </script>
 </body>

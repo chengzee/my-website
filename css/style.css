@@ -648,6 +648,77 @@ body.page-hero .site-header.scrolled {
 /* ============================
    Diary Page (cat-diary.html)
    ============================ */
+.diary-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.diary-title-bar h2 {
+  margin-bottom: 0;
+}
+
+.diary-title-bar h2::after {
+  display: none;
+}
+
+#admin-bar {
+  display: flex;
+  align-items: center;
+}
+
+.btn-admin-login {
+  background: #e8f4fd;
+  color: #336699;
+  border: 1.5px solid #336699;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-admin-login:hover {
+  background: #d0e8f7;
+}
+
+.admin-status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #2a7d4f;
+}
+
+.btn-admin-logout {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.btn-admin-logout:hover {
+  color: #c0392b;
+  border-color: #c0392b;
+}
+
+body.visitor-mode .admin-only {
+  display: none !important;
+}
+
+body.visitor-mode .admin-only-cell {
+  display: none !important;
+}
+
 .diary-form-card {
   background: #fff;
   border-radius: 14px;
