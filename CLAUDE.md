@@ -141,3 +141,26 @@
 11. 新增 `.github/copilot-instructions.md`：專案指引
 12. 新增 `CLAUDE.md`：AI 助理工作指引 + 經驗教訓
 13. `MyWebsite.code-workspace` 移除 assistant，實現完全隔離
+
+### 2026-03-02：Phase 1 — 貓咪檔案 + 飲食日記
+**變更內容：**
+1. 新增 `cats.html`：四隻貓（波波/米米/豆豆/小寶寶）卡片式檔案
+   - 點擊卡片展開詳情（資料表、個性、最愛事物）
+   - CSS 展開動畫（max-height transition）
+2. 新增 `cat-diary.html`：互動式飲食日記
+   - 表單：日期/時間/貓咪/類型/食物/份量/備註
+   - localStorage 持久化儲存（無需後端）
+   - Chart.js 近 7 天堆疊長條圖（per-cat 顏色）
+   - 今日摘要卡片（每隻貓進食次數 & 總量）
+   - 篩選（依貓咪/類型）
+   - 匯出 / 匯入 JSON 備份功能
+3. `css/style.css` 新增大量元件樣式：
+   - `.cat-cards` / `.cat-card` / `.cat-card-header` / `.cat-card-body` / `.cat-card-detail`
+   - `.cat-badge` / `.cat-info-table` / `.tag-list` / `.tag`
+   - `.diary-form-card` / `.diary-form` / `.form-row` / `.form-group`
+   - `.btn-primary` / `.btn-secondary` / `.btn-delete`
+   - `.diary-controls` / `.filter-group` / `.data-actions`
+   - `.diary-summary` / `.summary-grid` / `.summary-card` / `.cat-dot` / `.cat-dot-lg`
+   - `.diary-chart-container` / `.diary-table-container` / `.diary-table`
+   - 對應 RWD 768px / 480px 斷點
+4. 所有頁面導覽列更新為 6 項：首頁/相片集/貓咪/飲食日記/文章/關於
