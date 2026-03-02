@@ -71,7 +71,7 @@
 ## 🔧 專案特定規則
 
 ### Git 操作
-- Remote: `https://github.com/chengzee/my-website.git`
+- Remote: `git@github.com:chengzee/my-website.git`（SSH）
 - **push 前必須先執行 `git remote -v` 確認 remote，並向使用者展示確認**
 - 提交前確認 `git status`、`git diff`
 - Commit message 格式：`feat/fix/docs: 簡短描述`
@@ -111,7 +111,13 @@
    - 正確：workspace 只包含自身專案資料夾，copilot-instructions.md 各自獨立  
    - 規則：**不同專案的指引文件保持完全隔離**
 
-3. **重構前先全面盤點**  
+3. **GitHub 認證使用 SSH**  
+   - 錯誤：用 HTTPS remote 嘗試 push，GitHub 已不支援密碼認證  
+   - 正確：使用 SSH remote（`git@github.com:chengzee/my-website.git`）  
+   - SSH Key：`mac-copilot-assistant`（已設定於 GitHub，read/write）  
+   - 規則：**remote 一律使用 SSH 格式，若發現是 HTTPS 先 `git remote set-url` 轉換**
+
+4. **重構前先全面盤點**  
    - 做法：先讀取所有檔案、列出問題清單、排優先序、再逐步實作  
    - 效果：一次性找出 articles.html 缺失、CSS 重複、圖片路徑混亂等多個問題  
    - 規則：**大型重構前先做完整的現況分析報告**

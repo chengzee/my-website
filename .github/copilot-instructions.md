@@ -60,7 +60,7 @@ MyWebsite/
 - 檔案命名：kebab-case（HTML）、snake_case（Python）
 
 ## Git 操作
-- Remote: `https://github.com/chengzee/my-website.git`
+- Remote: `git@github.com:chengzee/my-website.git`（SSH）
 - **push 前必須先確認 remote 資訊**（`git remote -v`），向使用者確認後才 push
 - 提交前確認 `git status`、`git diff`
 - Commit message 格式：`feat/fix/docs: 簡短描述`
