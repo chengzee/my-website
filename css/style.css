@@ -262,9 +262,40 @@ body.page-hero .site-header.scrolled {
 /* ============================
    Gallery
    ============================ */
+.gallery-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.filter-btn {
+  padding: 8px 18px;
+  border: 2px solid #336699;
+  border-radius: 20px;
+  background: #fff;
+  color: #336699;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover {
+  background: #e8f0f8;
+}
+.filter-btn.active {
+  background: #336699;
+  color: #fff;
+}
+.gallery-count {
+  text-align: center;
+  color: #999;
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
 .gallery {
   max-width: 1200px;
-  margin: 5.5rem auto 2rem;
+  margin: 1rem auto 2rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
@@ -588,15 +619,24 @@ body.page-hero .site-header.scrolled {
 }
 
 .cat-card-detail {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease, padding 0.3s ease;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease, padding 0.3s ease;
   padding: 0 1.25rem;
 }
 
+.cat-card-detail > * {
+  overflow: hidden;
+}
+
 .cat-card.expanded .cat-card-detail {
-  max-height: 600px;
+  grid-template-rows: 1fr;
   padding: 0.5rem 1.25rem 1.25rem;
+}
+
+.cat-card.expanded {
+  grid-column: 1 / -1;
+  max-width: 480px;
 }
 
 .cat-info-table {

@@ -1,48 +1,96 @@
+#!/usr/bin/env python3
+"""
+掃描 photos/ 所有子目錄，產生 photo-list.json
+供 photo-gallery.html 讀取顯示
+"""
 import os
 import json
 from datetime import datetime
 
 PHOTO_FOLDER = "photos"
+THUMB_FOLDER = os.path.join(PHOTO_FOLDER, "_thumbnails")
 OUTPUT_FILE = "photo-list.json"
+
+# 支援的圖片格式
+IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
+# 支援的影片格式
+VIDEO_EXTS = {".mp4", ".mov", ".m4v", ".webm"}
+
+# 排除的資料夾（底線開頭的分類）
+EXCLUDE_DIRS = {"_已刪除", "_thumbnails", "_保留"}
+
 
 def get_file_date(filepath):
     timestamp = os.path.getmtime(filepath)
     return datetime.fromtimestamp(timestamp).isoformat()
 
-# 先讀舊的 JSON，如果有的話
-if os.path.exists(OUTPUT_FILE):
-    with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
-        photo_entries = json.load(f)
-    print(f"✅ 讀到現有資料，共 {len(photo_entries)} 筆")
-else:
-    photo_entries = []
-    print("✅ 沒有找到舊的 JSON，建立新檔案")
 
-# 建立一個 set 紀錄現有檔名，避免重複
-existing_files = set(entry["filename"] for entry in photo_entries)
+def scan_photos():
+    """遞迴掃描 photos/ 下所有子目錄的圖片與影片"""
+    entries = []
 
-# 掃資料夾裡的所有 jpg
-new_entries = []
-for filename in os.listdir(PHOTO_FOLDER):
-    if filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg"):
-        rel_path = os.path.join(PHOTO_FOLDER, filename)
-        if rel_path not in existing_files:
-            file_date = get_file_date(rel_path)
-            new_entry = {
-                "filename": rel_path,
-                "date": file_date
-            }
-            new_entries.append(new_entry)
-            print(f"🆕 新增檔案: {rel_path}")
+    for root, dirs, files in os.walk(PHOTO_FOLDER):
+        # 取得相對於 photos/ 的資料夾名稱
+        rel_dir = os.path.relpath(root, PHOTO_FOLDER)
+        folder_name = rel_dir if rel_dir != "." else ""
 
-# 合併新舊
-photo_entries.extend(new_entries)
+        # 跳過排除的資料夾
+        if folder_name in EXCLUDE_DIRS:
+            dirs[:] = []  # 不再遞迴進入
+            continue
 
-# 依日期新到舊排序
-photo_entries.sort(key=lambda x: x["date"], reverse=True)
+        for filename in files:
+            ext = os.path.splitext(filename)[1].lower()
+            if ext in IMAGE_EXTS or ext in VIDEO_EXTS:
+                rel_path = os.path.join(root, filename)
+                file_type = "image" if ext in IMAGE_EXTS else "video"
 
-# 輸出 JSON
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-    json.dump(photo_entries, f, indent=2, ensure_ascii=False)
+                # 查找對應的縮圖
+                thumb_path = ""
+                if file_type == "image" and folder_name:
+                    base = os.path.splitext(filename)[0]
+                    candidate = os.path.join(THUMB_FOLDER, folder_name, base + ".jpg")
+                    if os.path.isfile(candidate):
+                        thumb_path = candidate
 
-print(f"✅ 輸出完成：{OUTPUT_FILE}，總共 {len(photo_entries)} 筆")
+                entry = {
+                    "filename": rel_path,
+                    "category": folder_name,
+                    "type": file_type,
+                    "date": get_file_date(rel_path)
+                }
+                if thumb_path:
+                    entry["thumbnail"] = thumb_path
+                entries.append(entry)
+
+    return entries
+
+
+def main():
+    entries = scan_photos()
+
+    # 依日期新到舊排序
+    entries.sort(key=lambda x: x["date"], reverse=True)
+
+    # 統計
+    categories = {}
+    for e in entries:
+        cat = e["category"] or "(根目錄)"
+        categories[cat] = categories.get(cat, 0) + 1
+
+    # 輸出 JSON
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(entries, f, indent=2, ensure_ascii=False)
+
+    print("=" * 40)
+    print("📸 photo-list.json 更新完成")
+    print("=" * 40)
+    for cat, count in sorted(categories.items()):
+        print("  %s: %d 張" % (cat, count))
+    print("-" * 40)
+    print("  總計: %d 筆" % len(entries))
+    print("  輸出: %s" % OUTPUT_FILE)
+
+
+if __name__ == "__main__":
+    main()

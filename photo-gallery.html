@@ -26,6 +26,18 @@
     </div>
   </header>
 
+  <!-- Category Filter -->
+  <section style="max-width:1200px;margin:80px auto 0;padding:1rem 1.5rem 0;">
+    <div class="gallery-filter" id="filterBar">
+      <button class="filter-btn active" data-cat="all">全部</button>
+      <button class="filter-btn" data-cat="波波">🐱 波波</button>
+      <button class="filter-btn" data-cat="米米">🐱 米米</button>
+      <button class="filter-btn" data-cat="豆豆">🐱 豆豆</button>
+      <button class="filter-btn" data-cat="小寶寶">🐱 小寶寶</button>
+    </div>
+    <p class="gallery-count" id="galleryCount"></p>
+  </section>
+
   <!-- Gallery -->
   <div class="gallery" id="gallery"></div>
 
@@ -50,59 +62,118 @@
     const IMAGES_PER_PAGE = 50;
     const gallery = document.getElementById('gallery');
     const pagination = document.getElementById('pagination');
+    const galleryCount = document.getElementById('galleryCount');
+
+    let allData = [];
+    let filteredData = [];
+    let currentCat = 'all';
 
     // 取得 ?page= 參數
-    const params = new URLSearchParams(window.location.search);
-    let page = parseInt(params.get('page')) || 1;
+    function getPage() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get('page')) || 1;
+    }
 
-    fetch('photo-list.json')
-      .then(response => response.json())
-      .then(data => {
-        const totalImages = data.length;
-        const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
+    // 篩選按鈕
+    document.getElementById('filterBar').addEventListener('click', function(e) {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      applyFilter();
+      renderPage(1);
+      // 更新 URL 不重載
+      history.replaceState(null, '', '?page=1' + (currentCat !== 'all' ? '&cat=' + encodeURIComponent(currentCat) : ''));
+    });
 
-        if (page < 1) page = 1;
-        if (page > totalPages) page = totalPages;
+    function applyFilter() {
+      if (currentCat === 'all') {
+        filteredData = allData.filter(item => item.type === 'image');
+      } else {
+        filteredData = allData.filter(item => item.category === currentCat && item.type === 'image');
+      }
+    }
 
-        const startIndex = (page - 1) * IMAGES_PER_PAGE;
-        const endIndex = startIndex + IMAGES_PER_PAGE;
-        const imagesToShow = data.slice(startIndex, endIndex);
+    function renderPage(page) {
+      gallery.innerHTML = '';
+      pagination.innerHTML = '';
 
-        // 顯示圖片
-        imagesToShow.forEach(item => {
-          const img = document.createElement('img');
-          img.src = item.filename;
-          img.alt = 'photo';
-          img.loading = 'lazy';
-          // 點擊開啟 Lightbox
-          img.addEventListener('click', () => openLightbox(item.filename));
-          gallery.appendChild(img);
-        });
+      const totalImages = filteredData.length;
+      const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
 
-        // 建立分頁按鈕
-        if (totalPages > 1) {
-          if (page > 1) {
-            const prev = document.createElement('a');
-            prev.href = `?page=${page - 1}`;
-            prev.textContent = '← 上一頁';
-            pagination.appendChild(prev);
-          }
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      if (totalPages === 0) page = 0;
 
-          // 頁碼資訊
-          const info = document.createElement('span');
-          info.textContent = ` 第 ${page} / ${totalPages} 頁 `;
-          info.style.cssText = 'display:flex;align-items:center;color:#666;font-size:0.9rem;';
-          pagination.appendChild(info);
+      galleryCount.textContent = '共 ' + totalImages + ' 張照片' +
+        (currentCat !== 'all' ? '（' + currentCat + '）' : '');
 
-          if (page < totalPages) {
-            const next = document.createElement('a');
-            next.href = `?page=${page + 1}`;
-            next.textContent = '下一頁 →';
-            pagination.appendChild(next);
-          }
+      if (totalImages === 0) {
+        gallery.innerHTML = '<p style="text-align:center;padding:2rem;color:#999;grid-column:1/-1;">此分類暫無照片</p>';
+        return;
+      }
+
+      const startIndex = (page - 1) * IMAGES_PER_PAGE;
+      const endIndex = startIndex + IMAGES_PER_PAGE;
+      const imagesToShow = filteredData.slice(startIndex, endIndex);
+
+      // 顯示圖片
+      imagesToShow.forEach(item => {
+        const img = document.createElement('img');
+        // 使用縮圖加快載入，沒有縮圖則用原圖
+        img.src = item.thumbnail || item.filename;
+        img.alt = item.category || 'photo';
+        img.loading = 'lazy';
+        img.addEventListener('click', function() { openLightbox(item.filename); });
+        gallery.appendChild(img);
+      });
+
+      // 分頁按鈕
+      if (totalPages > 1) {
+        if (page > 1) {
+          const prev = document.createElement('a');
+          prev.href = '#';
+          prev.textContent = '← 上一頁';
+          prev.addEventListener('click', function(e) { e.preventDefault(); renderPage(page - 1); });
+          pagination.appendChild(prev);
         }
+
+        const info = document.createElement('span');
+        info.textContent = ' 第 ' + page + ' / ' + totalPages + ' 頁 ';
+        info.style.cssText = 'display:flex;align-items:center;color:#666;font-size:0.9rem;';
+        pagination.appendChild(info);
+
+        if (page < totalPages) {
+          const next = document.createElement('a');
+          next.href = '#';
+          next.textContent = '下一頁 →';
+          next.addEventListener('click', function(e) { e.preventDefault(); renderPage(page + 1); });
+          pagination.appendChild(next);
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 初始化
+    fetch('photo-list.json')
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        allData = data;
+        // 讀取 URL 的 cat 參數
+        var params = new URLSearchParams(window.location.search);
+        var urlCat = params.get('cat');
+        if (urlCat) {
+          currentCat = urlCat;
+          document.querySelectorAll('.filter-btn').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.cat === urlCat);
+          });
+        }
+        applyFilter();
+        renderPage(getPage());
       })
-      .catch(error => {
+      .catch(function(error) {
         console.error('讀取 JSON 發生錯誤:', error);
         gallery.innerHTML = '<p style="text-align:center;padding:2rem;color:#999;">抱歉，無法載入相片清單。</p>';
       });

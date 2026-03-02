@@ -4,6 +4,15 @@
 # 個人相簿原始檔（不進 repo）
 MyPhotos/
 
+# 照片原始檔太大（2-8MB/張，總計 5.8GB）不進 repo
+# 縮圖 photos/_thumbnails/ 保留追蹤
+photos/波波/
+photos/米米/
+photos/豆豆/
+photos/小寶寶/
+photos/_已刪除/
+photos/_保留/
+
 # HEIC 原始檔與轉檔暫存
 heic_images/
 converted_images/
