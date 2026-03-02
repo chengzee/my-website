@@ -1,0 +1,622 @@
+/* ============================
+   MyWebsite - 吉米與他的貓貓小窩
+   共用樣式表
+   ============================ */
+
+/* --- Reset --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', 'Noto Sans TC', Arial, sans-serif;
+  color: #333;
+  background-color: #f8f8f8;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* ============================
+   Header + Navigation
+   ============================ */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  /* 預設：非 hero 頁面，固定白底 */
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #336699;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+}
+
+.site-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.site-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Navigation */
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  border-bottom-color: currentColor;
+}
+
+/* 手機漢堡選單按鈕 */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Hero 頁面：header 初始透明，滾動後變白 */
+body.page-hero .site-header {
+  background-color: transparent;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  box-shadow: none;
+}
+
+body.page-hero .site-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #336699;
+  text-shadow: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+
+/* ============================
+   Hero Section (Slider)
+   ============================ */
+.hero {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.slider {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  height: 100%;
+  transition: transform 1.2s ease-in-out;
+}
+
+.slide-item {
+  flex: 0 0 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.slider-nav {
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
+  text-align: center;
+  z-index: 5;
+}
+
+.slider-nav button {
+  background-color: rgba(255, 255, 255, 0.6);
+  border: none;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.slider-nav button:hover {
+  transform: scale(1.2);
+}
+
+.slider-nav button.active {
+  background-color: #336699;
+}
+
+.hero-caption {
+  width: 100%;
+  background-color: #fff;
+  padding: 1rem 2rem;
+  text-align: right;
+}
+
+
+/* ============================
+   Content Sections
+   ============================ */
+.section {
+  padding: 3rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  color: #336699;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #336699;
+  border-radius: 2px;
+}
+
+
+/* ============================
+   Cards
+   ============================ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 1rem 1.25rem;
+}
+
+.card h3 {
+  font-size: 1.15rem;
+  color: #336699;
+  margin-bottom: 0.5rem;
+}
+
+.card p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+
+/* ============================
+   Gallery
+   ============================ */
+.gallery {
+  max-width: 1200px;
+  margin: 5.5rem auto 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.gallery img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+
+/* ============================
+   Pagination
+   ============================ */
+.pagination {
+  text-align: center;
+  margin: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #336699;
+  color: #fff;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+  background-color: #274d73;
+}
+
+
+/* ============================
+   Buttons
+   ============================ */
+.button-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #336699;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.3s, transform 0.2s;
+  font-weight: 500;
+}
+
+.button-link:hover {
+  background-color: #274d73;
+  transform: translateY(-1px);
+}
+
+
+/* ============================
+   Lightbox (相片放大檢視)
+   ============================ */
+.lightbox-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.92);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.lightbox-overlay.active {
+  display: flex;
+}
+
+.lightbox-overlay img {
+  max-width: 92vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: default;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  z-index: 201;
+  line-height: 1;
+  transition: transform 0.2s;
+  user-select: none;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.2);
+}
+
+
+/* ============================
+   Footer
+   ============================ */
+.site-footer {
+  background-color: #2c3e50;
+  color: #ccc;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 3rem;
+}
+
+.site-footer p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+.site-footer a {
+  color: #7fb3d8;
+  transition: color 0.3s;
+}
+
+.site-footer a:hover {
+  color: #fff;
+}
+
+
+/* ============================
+   About Page (關於頁)
+   ============================ */
+.about-content {
+  max-width: 800px;
+  margin: 5.5rem auto 2rem;
+  padding: 2rem 1.5rem;
+}
+
+.about-content h1 {
+  color: #336699;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.about-content .subtitle {
+  color: #888;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-content h2 {
+  color: #336699;
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.about-content p {
+  margin-bottom: 0.75rem;
+  line-height: 1.7;
+}
+
+.cat-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.cat-gallery figure {
+  text-align: center;
+}
+
+.cat-gallery img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.cat-gallery img:hover {
+  transform: scale(1.03);
+}
+
+.cat-gallery figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+
+/* ============================
+   404 Error Page
+   ============================ */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+}
+
+.error-page h1 {
+  font-size: 6rem;
+  color: #336699;
+  margin-bottom: 0.5rem;
+}
+
+.error-page h2 {
+  font-size: 1.5rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+
+/* ============================
+   Articles Placeholder
+   ============================ */
+.placeholder-message {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+  margin-top: 4rem;
+}
+
+.placeholder-message .icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.placeholder-message h2 {
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+
+/* ============================
+   Responsive (RWD)
+   ============================ */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0.6rem 1rem;
+  }
+
+  .site-title {
+    font-size: 1.15rem;
+  }
+
+  /* 手機：導覽列折疊 */
+  .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.98);
+    flex-direction: column;
+    padding: 0.5rem 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav a {
+    padding: 0.75rem 1.5rem;
+    color: #336699 !important;
+    border-bottom: none;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  /* Hero page 手機：漢堡按鈕白色 */
+  body.page-hero .nav-toggle {
+    color: #fff;
+  }
+  body.page-hero .site-header.scrolled .nav-toggle {
+    color: #336699;
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-top: 4.5rem;
+  }
+
+  .gallery img {
+    height: 150px;
+  }
+
+  .cat-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about-content {
+    margin-top: 4.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .error-page h1 {
+    font-size: 4rem;
+  }
+
+  .placeholder-message {
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cat-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .gallery img {
+    height: 120px;
+  }
+
+  .hero-caption {
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+}

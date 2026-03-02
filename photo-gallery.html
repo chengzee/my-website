@@ -3,115 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>我的相片集</title>
-  <link rel="icon" type="image/png" href="images/favicon.png">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-    }
-
-    header {
-      background-color: #336699;
-      color: #fff;
-      text-align: center;
-      padding: 1rem;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-
-    .gallery {
-      max-width: 1200px;
-      margin: 2rem auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      padding: 0 1rem;
-    }
-
-    .gallery img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-      cursor: pointer;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.02);
-    }
-
-    .pagination {
-      text-align: center;
-      margin: 2rem;
-    }
-
-    .pagination a {
-      display: inline-block;
-      margin: 0 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: #336699;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-
-    .pagination a:hover {
-      background-color: #274d73;
-    }
-    /* HEADER */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1rem 0.5rem;
-      text-align: center;
-      z-index: 10;
-      transition: background-color 0.3s, color 0.3s;
-      background-color: transparent;
-      color: #fff;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.7);
-    }
-    header.scrolled {
-      /* background-color: #fff; */
-      background-color: rgba(255, 255, 255, 0.85);
-      border-bottom: 1px solid #ddd;
-      color: #336699;
-      text-shadow: none;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      transition: color 0.3s;
-    }
-
-  </style>
+  <meta name="description" content="吉米與他的貓貓小窩 - 相片集" />
+  <title>相片集 - 吉米與他的貓貓小窩</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header id="page-header">
-    <h1>吉米與他的貓貓小窩</h1>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="site-title"><a href="homepage.html">吉米與他的貓貓小窩</a></h1>
+      <nav class="main-nav">
+        <a href="homepage.html">首頁</a>
+        <a href="photo-gallery.html">相片集</a>
+        <a href="articles.html">文章</a>
+        <a href="about.html">關於</a>
+      </nav>
+      <button class="nav-toggle" aria-label="選單">☰</button>
+    </div>
   </header>
 
+  <!-- Gallery -->
   <div class="gallery" id="gallery"></div>
 
+  <!-- Pagination -->
   <div class="pagination" id="pagination"></div>
 
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="放大檢視" />
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>&copy; 2025 吉米與他的貓貓小窩</p>
+    <p>ig：<a href="https://instagram.com/czhuang" target="_blank" rel="noopener">czhuang</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/common.js"></script>
   <script>
-    const header = document.getElementById('page-header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-        } else {
-        header.classList.remove('scrolled');
-        }
-    });
     const IMAGES_PER_PAGE = 50;
     const gallery = document.getElementById('gallery');
     const pagination = document.getElementById('pagination');
@@ -126,7 +59,6 @@
         const totalImages = data.length;
         const totalPages = Math.ceil(totalImages / IMAGES_PER_PAGE);
 
-        // 限制 page 在合理範圍
         if (page < 1) page = 1;
         if (page > totalPages) page = totalPages;
 
@@ -138,7 +70,10 @@
         imagesToShow.forEach(item => {
           const img = document.createElement('img');
           img.src = item.filename;
-          img.alt = "photo";
+          img.alt = 'photo';
+          img.loading = 'lazy';
+          // 點擊開啟 Lightbox
+          img.addEventListener('click', () => openLightbox(item.filename));
           gallery.appendChild(img);
         });
 
@@ -147,22 +82,56 @@
           if (page > 1) {
             const prev = document.createElement('a');
             prev.href = `?page=${page - 1}`;
-            prev.textContent = '上一頁';
+            prev.textContent = '← 上一頁';
             pagination.appendChild(prev);
           }
+
+          // 頁碼資訊
+          const info = document.createElement('span');
+          info.textContent = ` 第 ${page} / ${totalPages} 頁 `;
+          info.style.cssText = 'display:flex;align-items:center;color:#666;font-size:0.9rem;';
+          pagination.appendChild(info);
 
           if (page < totalPages) {
             const next = document.createElement('a');
             next.href = `?page=${page + 1}`;
-            next.textContent = '下一頁';
+            next.textContent = '下一頁 →';
             pagination.appendChild(next);
           }
         }
       })
       .catch(error => {
         console.error('讀取 JSON 發生錯誤:', error);
-        gallery.innerHTML = "<p>抱歉，無法載入相片清單。</p>";
+        gallery.innerHTML = '<p style="text-align:center;padding:2rem;color:#999;">抱歉，無法載入相片清單。</p>';
       });
+
+    // === Lightbox 功能 ===
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // ESC 鍵關閉
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
   </script>
+
 </body>
 </html>

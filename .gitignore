@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# 個人相簿原始檔（不進 repo）
+MyPhotos/
+
+# HEIC 原始檔與轉檔暫存
+heic_images/
+converted_images/
+
+# 備份檔
+*.bak
+
+# 編輯器
+*.code-workspace
+.vscode/
+
+# 暫停使用的腳本
+(暫停使用)*
