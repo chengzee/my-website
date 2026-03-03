@@ -89,52 +89,50 @@
     // === Hero 無限輪播 ===
     const slidesContainer = document.getElementById('slides');
     const navContainer = document.getElementById('slider-nav');
-    let slides = [];
     let currentIndex = 1;
     let autoplayInterval;
 
-    fetch('photo-list.json')
-      .then(res => res.json())
-      .then(data => {
-        if (data.length === 0) return;
-        // 只取有縮圖的圖片，優先顯示載入快的
-        const imagesOnly = data.filter(item => item.type === 'image' && item.thumbnail);
-        slides = imagesOnly.slice(0, 6);
-        if (slides.length === 0) slides = data.filter(item => item.type === 'image').slice(0, 6);
+    // 精選 Hero 照片（1920px 高品質，四隻貓都有代表）
+    const heroPhotos = [
+      'photos/_hero/IMG_0793.jpg',  // 波波
+      'photos/_hero/IMG_0779.jpg',  // 米米
+      'photos/_hero/IMG_0819.jpg',  // 豆豆
+      'photos/_hero/IMG_0162.jpg',  // 小寶寶
+      'photos/_hero/IMG_0805.jpg',  // 波波
+      'photos/_hero/IMG_0784.jpg',  // 米米
+    ];
 
-        // 無限循環：前後各加一個 clone
-        const getSrc = item => item.thumbnail || item.filename;
-        const firstClone = { src: getSrc(slides[0]) };
-        const lastClone  = { src: getSrc(slides[slides.length - 1]) };
-        const allSlides  = [lastClone, ...slides.map(s => ({ src: getSrc(s) })), firstClone];
+    // 無限循環：前後各加一個 clone
+    const firstClone = heroPhotos[0];
+    const lastClone  = heroPhotos[heroPhotos.length - 1];
+    const allSlides  = [lastClone, ...heroPhotos, firstClone];
 
-        allSlides.forEach(item => {
-          const slide = document.createElement('div');
-          slide.classList.add('slide-item');
-          const img = document.createElement('img');
-          img.src = item.src;
-          img.alt = '近期相片';
-          img.loading = 'lazy';
-          slide.appendChild(img);
-          slidesContainer.appendChild(slide);
-        });
+    allSlides.forEach(src => {
+      const slide = document.createElement('div');
+      slide.classList.add('slide-item');
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '近期相片';
+      img.loading = 'lazy';
+      slide.appendChild(img);
+      slidesContainer.appendChild(slide);
+    });
 
-        // 導覽圓點
-        for (let i = 0; i < slides.length; i++) {
-          const btn = document.createElement('button');
-          btn.setAttribute('aria-label', `第 ${i + 1} 張`);
-          btn.addEventListener('click', () => {
-            stopAutoplay();
-            goToSlide(i + 1);
-            startAutoplay();
-          });
-          navContainer.appendChild(btn);
-        }
-
-        slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
-        updateNav();
+    // 導覽圓點
+    for (let i = 0; i < heroPhotos.length; i++) {
+      const btn = document.createElement('button');
+      btn.setAttribute('aria-label', `第 ${i + 1} 張`);
+      btn.addEventListener('click', () => {
+        stopAutoplay();
+        goToSlide(i + 1);
         startAutoplay();
       });
+      navContainer.appendChild(btn);
+    }
+
+    slidesContainer.style.transform = `translateX(-${currentIndex * 100}vw)`;
+    updateNav();
+    startAutoplay();
 
     function goToSlide(index) {
       slidesContainer.style.transition = 'transform 1.2s ease-in-out';
