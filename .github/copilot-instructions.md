@@ -132,3 +132,17 @@ MyWebsite/
 - 公司內網環境不建立外網隧道，避免資安風險
 - Cloudflare Tunnel 需 port 7844 出站（TCP/UDP），公司防火牆通常封鎖
 - 網站維持內網 `10.77.49.88` 存取，未來在外網環境再實作
+
+### 2026-03-03：Phase 3.2 — Hero/Card 圖片品質 + Gallery 權限修復
+**變更內容：**
+1. Hero 輪播改用 1920px 專用圖片（`photos/_hero/`），以亮度分析選出最佳 6 張
+2. 首頁卡片改用 800px 專用圖片（`photos/_cards/`），改善裁切與畫質
+3. CSS `.card img` height 200→240px，加 `object-position: center 30%`
+4. 相片集 Lightbox 部分照片無法顯示 — 根因：rsync 保留 macOS 權限，96 個檔案為 600（owner-only），Nginx 無法讀取
+5. VM 修復：`chmod -R a+rX /var/www/my-website/photos/`，96 個檔案權限 600→644
+6. 本地修復：同步修正 photos/ 權限，防止未來 rsync 再帶錯誤權限
+
+**經驗教訓：**
+- rsync 預設會保留來源檔案權限，macOS 部分檔案權限為 600（如 AirDrop 接收的照片）
+- 部署後應執行 `chmod -R a+rX` 確保 web server 可讀取所有靜態檔案
+- 檢查 403 問題時，先查檔案權限再查 Nginx 設定
