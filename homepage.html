@@ -10,21 +10,7 @@
 </head>
 <body class="page-hero">
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <h1 class="site-title"><a href="homepage.html">吉米與他的貓貓小窩</a></h1>
-      <nav class="main-nav">
-        <a href="homepage.html">首頁</a>
-        <a href="photo-gallery.html">相片集</a>
-        <a href="cats.html">貓咪</a>
-        <a href="cat-diary.html">飲食日記</a>
-        <a href="articles.html">文章</a>
-        <a href="about.html">關於</a>
-      </nav>
-      <button class="nav-toggle" aria-label="選單">☰</button>
-    </div>
-  </header>
+  <div id="site-header"></div>
 
   <!-- Hero 輪播 -->
   <section class="hero">
@@ -38,52 +24,47 @@
     <a class="button-link" href="photo-gallery.html">前往相片集 →</a>
   </section>
 
-  <!-- 近期文章 -->
+  <!-- 貓咪專區 -->
   <section class="section">
-    <h2>近期文章</h2>
+    <h2>我們的貓咪</h2>
     <div class="cards">
-      <div class="card">
+      <a href="cats.html#bobo" class="card" style="text-decoration:none;color:inherit;">
         <img src="photos/_cards/bobo.jpg" alt="波波">
         <div class="card-body">
           <h3>世上只有波波好</h3>
           <p>天使的臉孔、魔鬼的身材...</p>
         </div>
-      </div>
-      <!-- 可繼續新增更多卡片 -->
+      </a>
     </div>
-    <a class="button-link" href="articles.html">前往文章列表 →</a>
+    <a class="button-link" href="cats.html">查看所有貓咪 →</a>
   </section>
 
   <!-- 近期相簿 / 影片 -->
   <section class="section">
     <h2>近期相簿 / 影片</h2>
     <div class="cards">
-      <div class="card">
+      <a href="photo-gallery.html?cat=%E7%B1%B3%E7%B1%B3" class="card" style="text-decoration:none;color:inherit;">
         <img src="photos/_cards/mimi.jpg" alt="米米">
         <div class="card-body">
           <h3>你也想被米米眼神魅惑嗎？</h3>
           <p>歡慶米米 - 2024/05 生日</p>
         </div>
-      </div>
-      <div class="card">
+      </a>
+      <a href="photo-gallery.html?cat=%E8%B1%86%E8%B1%86" class="card" style="text-decoration:none;color:inherit;">
         <img src="photos/_cards/doudou.jpg" alt="豆豆">
         <div class="card-body">
           <h3>我再睡一下...</h3>
           <p>歡慶豆豆 - 2024/05 生日</p>
         </div>
-      </div>
-      <!-- 可繼續新增更多卡片 -->
+      </a>
     </div>
     <a class="button-link" href="photo-gallery.html">前往影音列表 →</a>
   </section>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <p>&copy; 2026 吉米與他的貓貓小窩</p>
-    <p><a href="https://instagram.com/cheng_zee" target="_blank" rel="noopener" class="ig-link"><svg class="ig-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> cheng_zee</a></p>
-  </footer>
+  <div id="site-footer"></div>
 
   <!-- Scripts -->
+  <script src="js/components.js"></script>
   <script src="js/common.js"></script>
   <script>
     // === Hero 無限輪播 ===
@@ -107,13 +88,14 @@
     const lastClone  = heroPhotos[heroPhotos.length - 1];
     const allSlides  = [lastClone, ...heroPhotos, firstClone];
 
-    allSlides.forEach(src => {
+    allSlides.forEach((src, i) => {
       const slide = document.createElement('div');
       slide.classList.add('slide-item');
       const img = document.createElement('img');
       img.src = src;
       img.alt = '近期相片';
-      img.loading = 'lazy';
+      // 首張可見的圖片（index 1）用 eager，其餘 lazy
+      img.loading = (i <= 2) ? 'eager' : 'lazy';
       slide.appendChild(img);
       slidesContainer.appendChild(slide);
     });
@@ -171,6 +153,21 @@
         btn.classList.toggle('active', i === currentIndex - 1);
       });
     }
+
+    // === 觸控滑動支援 ===
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const heroEl = document.querySelector('.hero');
+    heroEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    heroEl.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        stopAutoplay();
+        goToSlide(currentIndex + (diff > 0 ? 1 : -1));
+        startAutoplay();
+      }
+    });
   </script>
 
 </body>

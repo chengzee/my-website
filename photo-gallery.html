@@ -10,24 +10,10 @@
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="header-inner">
-      <h1 class="site-title"><a href="homepage.html">吉米與他的貓貓小窩</a></h1>
-      <nav class="main-nav">
-        <a href="homepage.html">首頁</a>
-        <a href="photo-gallery.html">相片集</a>
-        <a href="cats.html">貓咪</a>
-        <a href="cat-diary.html">飲食日記</a>
-        <a href="articles.html">文章</a>
-        <a href="about.html">關於</a>
-      </nav>
-      <button class="nav-toggle" aria-label="選單">☰</button>
-    </div>
-  </header>
+  <div id="site-header"></div>
 
   <!-- Category Filter -->
-  <section style="max-width:1200px;margin:80px auto 0;padding:1rem 1.5rem 0;">
+  <section class="gallery-filter-section">
     <div class="gallery-filter" id="filterBar">
       <button class="filter-btn active" data-cat="all">全部</button>
       <button class="filter-btn" data-cat="波波">🐱 波波</button>
@@ -47,16 +33,16 @@
   <!-- Lightbox -->
   <div class="lightbox-overlay" id="lightbox">
     <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="上一張">&#10094;</button>
     <img id="lightbox-img" src="" alt="放大檢視" />
+    <button class="lightbox-next" id="lightbox-next" aria-label="下一張">&#10095;</button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <p>&copy; 2026 吉米與他的貓貓小窩</p>
-    <p><a href="https://instagram.com/cheng_zee" target="_blank" rel="noopener" class="ig-link"><svg class="ig-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg> cheng_zee</a></p>
-  </footer>
+  <div id="site-footer"></div>
 
   <!-- Scripts -->
+  <script src="js/components.js"></script>
   <script src="js/common.js"></script>
   <script>
     const IMAGES_PER_PAGE = 50;
@@ -188,21 +174,36 @@
         gallery.innerHTML = '<p style="text-align:center;padding:2rem;color:#999;">抱歉，無法載入相片清單。</p>';
       });
 
-    // === Lightbox 功能 ===
+    // === Lightbox 功能（含左右導覽）===
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxPrev = document.getElementById('lightbox-prev');
+    const lightboxNext = document.getElementById('lightbox-next');
+    const lightboxCounter = document.getElementById('lightbox-counter');
+    let lightboxIndex = -1;
 
     function openLightbox(src) {
-      lightboxImg.src = src;
+      // 找到在 filteredData 中的 index
+      lightboxIndex = filteredData.findIndex(item => item.filename === src);
+      showLightboxImage();
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden';
+    }
+
+    function showLightboxImage() {
+      if (lightboxIndex < 0 || lightboxIndex >= filteredData.length) return;
+      lightboxImg.src = filteredData[lightboxIndex].filename;
+      lightboxCounter.textContent = (lightboxIndex + 1) + ' / ' + filteredData.length;
+      lightboxPrev.style.display = lightboxIndex > 0 ? '' : 'none';
+      lightboxNext.style.display = lightboxIndex < filteredData.length - 1 ? '' : 'none';
     }
 
     function closeLightbox() {
       lightbox.classList.remove('active');
       lightboxImg.src = '';
       document.body.style.overflow = '';
+      lightboxIndex = -1;
     }
 
     lightboxClose.addEventListener('click', closeLightbox);
@@ -210,9 +211,33 @@
       if (e.target === lightbox) closeLightbox();
     });
 
-    // ESC 鍵關閉
+    lightboxPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (lightboxIndex > 0) { lightboxIndex--; showLightboxImage(); }
+    });
+
+    lightboxNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (lightboxIndex < filteredData.length - 1) { lightboxIndex++; showLightboxImage(); }
+    });
+
+    // 鍵盤導覽：ESC 關閉、← → 切換
     document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
       if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft' && lightboxIndex > 0) { lightboxIndex--; showLightboxImage(); }
+      if (e.key === 'ArrowRight' && lightboxIndex < filteredData.length - 1) { lightboxIndex++; showLightboxImage(); }
+    });
+
+    // Lightbox 觸控滑動
+    let lbTouchStartX = 0;
+    lightbox.addEventListener('touchstart', e => { lbTouchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    lightbox.addEventListener('touchend', e => {
+      const diff = lbTouchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0 && lightboxIndex < filteredData.length - 1) { lightboxIndex++; showLightboxImage(); }
+        if (diff < 0 && lightboxIndex > 0) { lightboxIndex--; showLightboxImage(); }
+      }
     });
   </script>
 
