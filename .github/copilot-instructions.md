@@ -75,6 +75,8 @@ MyWebsite/
 - 圖片檔案較大，注意 .gitignore 排除不必要的檔案
 - `homepage_sample.html` 為舊版，已被 `homepage.html` 取代，可考慮刪除
 - 根目錄散落的 `IMG_*.jpg` 為早期遺留，圖片統一放 `photos/`
+- **不要在公司內網建立外網隧道**（Cloudflare Tunnel / ngrok 等），除非使用者確認網管已授權
+- 網站目前為**內網存取** `http://10.77.49.88`，未來在外網環境再實作對外功能
 
 ## 📝 開發紀錄
 
@@ -109,3 +111,24 @@ MyWebsite/
    - 匯出/匯入 JSON 備份
 3. `css/style.css` 新增：cat-cards、diary-form、diary-table、summary、chart 等元件樣式 + RWD
 4. 所有頁面導覽列更新為 6 項：首頁/相片集/貓咪/飲食日記/文章/關於
+
+### 2026-03-03：Phase 3 — VM 部署 + 照片同步
+**變更內容：**
+1. Alpine Linux 3.23.3 VM 部署（ESXi, IP `10.77.49.88`）
+2. Nginx 1.28.2 設定：靜態快取、gzip、403 安全封鎖（.git/.md/.py/tools/）
+3. rsync 5.7GB 貓咪照片至 VM
+4. 所有頁面驗證 HTTP 200
+
+### 2026-03-03：Phase 3.1 — 照片整理 + 縮圖優化 + Quick Wins
+**變更內容：**
+1. 6 張根目錄散落照片歸類至對應貓咪子目錄
+2. 產生 6 張新縮圖（25-58KB），首頁效能 30MB → <1MB
+3. homepage/cats/about 圖片路徑全面改用縮圖
+4. photo-list.json 修正 6 筆空分類
+5. 404.html 補 meta description、CSS 移除重複 width、cats.html 修正縮排
+6. Cloudflare Tunnel 嘗試失敗（port 7844 被封），使用者決策暫停外網存取
+
+**經驗教訓：**
+- 公司內網環境不建立外網隧道，避免資安風險
+- Cloudflare Tunnel 需 port 7844 出站（TCP/UDP），公司防火牆通常封鎖
+- 網站維持內網 `10.77.49.88` 存取，未來在外網環境再實作

@@ -100,8 +100,20 @@
 
 > 此區塊會隨使用累積持續更新，是 AI 助理的「長期記憶」。
 
-### 2026-03-02
-1. **Git push 前必須確認 remote**  
+### 2026-03-03
+5. **公司內網環境不建立外網隧道**
+   - 背景：嘗試用 Cloudflare Tunnel (Quick Tunnel) 將 VM 網站對外
+   - 問題：公司防火牆封鎖 port 7844（TCP/UDP），QUIC 和 HTTP/2 模式均無法建立連線
+   - 決策：**使用者明確決定暫停**，理由是公司環境不應建立外網連線管道，避免資安風險
+   - 規則：**不要在公司內網環境嘗試建立外部存取隧道（Cloudflare Tunnel / ngrok / SSH 反向隧道等），除非使用者明確確認網管已授權**
+   - 後續：已從 VM 移除 cloudflared，網站維持內網 `10.77.49.88` 存取。未來在外網環境再實作此功能
+
+6. **Cloudflare Tunnel 技術筆記（供未來參考）**
+   - cloudflared Quick Tunnel 不需帳號，分配隨機 `*.trycloudflare.com` 網址
+   - 預設用 QUIC (UDP 7844)，可加 `--protocol http2` 改走 TCP，但仍連 7844
+   - 如果 port 7844 被封，兩種協定都無法使用
+   - Alpine Linux 安裝：`wget` 官方 binary → `/usr/local/bin/cloudflared`
+   - 正式使用需 Cloudflare 帳號 + 自有網域，可設定固定子網域 + 自動 HTTPS  
    - 錯誤：直接執行 `git push` 沒有先確認 remote 是哪裡  
    - 正確：先 `git remote -v` 展示給使用者，確認後才 push  
    - 規則：**任何 push 操作前，先展示 remote 資訊並取得使用者同意**
@@ -209,6 +221,29 @@
 - root / `3edc@WSX1qaz`
 - SSH: `ssh root@10.77.49.88`（key auth）
 
+### 2026-03-03：Phase 3.1 — 照片整理 + 縮圖優化 + Quick Wins
+**變更內容：**
+1. **散落照片整理**：6 張根目錄遺留照片歸類至對應貓咪子目錄
+   - IMG_0006 2.jpg → 波波/IMG_0006.jpg（重新命名去空格）
+   - IMG_0762.JPG → 米米/、IMG_0807.JPG → 波波/
+   - IMG_1577.jpg → 小寶寶/、IMG_1701.jpg → 豆豆/、IMG_1750.jpg → 豆豆/
+2. **新增 6 張縮圖**（sips -Z 400），大小 25-58KB vs 原圖 1.2-7.3MB
+3. **頁面圖片路徑全面更新**：
+   - homepage.html：3 張卡片圖改用縮圖，Hero 輪播改為只載入有縮圖的圖片
+   - cats.html：4 張貓咪卡片圖改用縮圖
+   - about.html：4 張貓咪介紹圖改用縮圖
+4. **首頁效能優化**：Hero 輪播從 ~30MB → <1MB 圖片載入量
+5. **photo-list.json**：修正 6 筆空分類紀錄，補上 category + thumbnail
+6. **Quick Wins**：
+   - 404.html 補上 `<meta name="description">`
+   - css/style.css 移除 `.cat-info-table` 重複的 `width: 100%`
+   - cats.html 修正 4 處花色欄 `<tr>` 縮排不一致
+7. **Cloudflare Tunnel 嘗試與撤回**：
+   - 安裝 cloudflared 2026.2.0 → port 7844 被公司防火牆封鎖
+   - 嘗試 QUIC + HTTP/2 均 timeout
+   - 使用者決策：公司環境不建立外網隧道，已移除 cloudflared
+   - 網站維持內網 `10.77.49.88` 存取
+
 ---
 
 ## 🗺️ Roadmap（待進行）
@@ -218,13 +253,19 @@
 |---|------|----------|
 | 1 | VM 環境建置 + 網站上線 | 2026-03-03 |
 | 2 | 照片 rsync 同步至 VM（5.7GB） | 2026-03-03 |
+| 3 | photos/ 根目錄散落 JPG 清理（6 張歸類完成） | 2026-03-03 |
+| 4 | 縮圖優化 + 首頁效能（30MB→<1MB） | 2026-03-03 |
+| 5 | Quick Wins（404 meta / CSS / indent） | 2026-03-03 |
+
+### ⏸️ 擱置
+| # | 任務 | 說明 |
+|---|------|------|
+| 1 | **外網存取**（Cloudflare Tunnel / ngrok） | 公司環境資安考量暫停，未來在外網環境再實作。Port 7844 被封鎖，需網管授權或外網主機 |
 
 ### 🔴 高優先
 | # | 任務 | 說明 |
 |---|------|------|
-| 1 | **安全對外連線**（Cloudflare Tunnel） | 免開 port、自動 HTTPS、DDoS 防護 |
-| 2 | **MyPhotos/ 171 張保留照片重新分類** | 搬回 MyPhotos/ 等再跑 photo-manager |
-| 3 | **photos/ 根目錄散落 JPG 清理** | 6 張舊照片需歸類或刪除 |
+| 1 | **MyPhotos/ 171 張保留照片重新分類** | 搬回 MyPhotos/ 等再跑 photo-manager |
 
 ### 🟡 中優先
 | # | 任務 | 說明 |
