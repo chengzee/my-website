@@ -92,14 +92,14 @@
     let currentIndex = 1;
     let autoplayInterval;
 
-    // 精選 Hero 照片（1920px 高品質，四隻貓都有代表）
+    // 精選 Hero 照片（1920px 高品質，依亮度分析挑選最明亮的照片）
     const heroPhotos = [
-      'photos/_hero/IMG_0793.jpg',  // 波波
-      'photos/_hero/IMG_0779.jpg',  // 米米
-      'photos/_hero/IMG_0819.jpg',  // 豆豆
-      'photos/_hero/IMG_0162.jpg',  // 小寶寶
-      'photos/_hero/IMG_0805.jpg',  // 波波
-      'photos/_hero/IMG_0784.jpg',  // 米米
+      'photos/_hero/IMG_0766.jpg',  // 豆豆 - brightness 192
+      'photos/_hero/IMG_0785.jpg',  // 豆豆 - brightness 182
+      'photos/_hero/IMG_1575.jpg',  // 小寶寶 - brightness 132
+      'photos/_hero/IMG_0784.jpg',  // 米米 - brightness 130
+      'photos/_hero/IMG_1478.jpg',  // 波波 - brightness 128
+      'photos/_hero/IMG_0744.jpg',  // 豆豆 - brightness 178
     ];
 
     // 無限循環：前後各加一個 clone
