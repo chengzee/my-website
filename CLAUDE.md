@@ -185,14 +185,44 @@
 7. 生日修正：波波=2023-09、小寶寶=2016
 8. 新增 `docs/使用手冊.md`：完整使用手冊
 
+### 2026-03-03：Phase 3 — VM 部署 + 照片同步上線
+**變更內容：**
+1. **VM 環境建置**（Alpine Linux 3.23.3 on ESXi）
+   - IP: `10.77.49.88`，1 vCPU / 463MB RAM / 30.1GB disk
+   - 安裝 Nginx 1.28.2、git、curl、rsync 等基礎套件
+   - SSH Key 認證（mac-copilot-assistant ed25519）
+2. **Nginx 設定**（`/etc/nginx/http.d/default.conf`）
+   - 靜態檔案快取（圖片 30 天、CSS/JS 7 天）
+   - gzip 壓縮（text/css/js/json/svg）
+   - 404 → 404.html 自訂錯誤頁
+   - 安全封鎖：`.git`、`.md`、`tools/`、`.py` → 403
+3. **Git clone** 網站到 `/var/www/my-website`
+4. **照片 rsync 同步**（Mac → VM，共 ~5.7GB）
+   - 波波: 153 檔案、米米: 163 檔案、豆豆: 185 檔案、小寶寶: 55 檔案
+   - _thumbnails: 141 張（已在 Git 中）
+5. **服務驗證**：7 個 HTML 頁面全部 HTTP 200，縮圖 + 原圖正常
+6. **開機自動啟動**：Nginx 已加入 `rc-update default`
+7. 新增 `docs/VM-setup-guide.md`：Alpine + Nginx 完整部署指南
+8. 新增 `docs/VM-maintenance-README.md`：VM 日常維護手冊（供 GitHub 查閱）
+
+**VM 帳號資訊：**
+- root / `3edc@WSX1qaz`
+- SSH: `ssh root@10.77.49.88`（key auth）
+
 ---
 
 ## 🗺️ Roadmap（待進行）
 
+### ✅ 已完成
+| # | 任務 | 完成日期 |
+|---|------|----------|
+| 1 | VM 環境建置 + 網站上線 | 2026-03-03 |
+| 2 | 照片 rsync 同步至 VM（5.7GB） | 2026-03-03 |
+
 ### 🔴 高優先
 | # | 任務 | 說明 |
 |---|------|------|
-| 1 | **VM 環境建置 + 網站上線** | 建議 Alpine Linux，Nginx 靜態伺服 |
+| 1 | **安全對外連線**（Cloudflare Tunnel） | 免開 port、自動 HTTPS、DDoS 防護 |
 | 2 | **MyPhotos/ 171 張保留照片重新分類** | 搬回 MyPhotos/ 等再跑 photo-manager |
 | 3 | **photos/ 根目錄散落 JPG 清理** | 6 張舊照片需歸類或刪除 |
 
