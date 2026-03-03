@@ -89,7 +89,15 @@
 
     function applyFilter() {
       if (currentCat === 'all') {
-        filteredData = allData.filter(item => item.type === 'image');
+        // 「全部」分類時，依 filename 去重（避免同一張照片在多個分類目錄中重複出現）
+        var seen = {};
+        filteredData = [];
+        allData.forEach(function(item) {
+          if (item.type === 'image' && !seen[item.filename]) {
+            seen[item.filename] = true;
+            filteredData.push(item);
+          }
+        });
       } else {
         filteredData = allData.filter(item => item.category === currentCat && item.type === 'image');
       }
