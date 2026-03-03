@@ -666,7 +666,6 @@ body.page-hero .site-header.scrolled {
 
 /* --- Detail 內部 --- */
 .cat-info-table {
-  width: 100%;
   border-collapse: collapse;
   margin: 0.75rem 1.25rem 0.5rem;
   width: calc(100% - 2.5rem);

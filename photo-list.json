@@ -1,39 +1,45 @@
 [
   {
-    "filename": "photos/IMG_1750.jpg",
-    "category": "",
+    "filename": "photos/豆豆/IMG_1750.jpg",
+    "category": "豆豆",
     "type": "image",
-    "date": "2025-07-04T12:16:30.257591"
+    "date": "2025-07-04T12:16:30.257591",
+    "thumbnail": "photos/_thumbnails/豆豆/IMG_1750.jpg"
   },
   {
-    "filename": "photos/IMG_1701.jpg",
-    "category": "",
+    "filename": "photos/豆豆/IMG_1701.jpg",
+    "category": "豆豆",
     "type": "image",
-    "date": "2025-07-04T12:16:30.239232"
+    "date": "2025-07-04T12:16:30.239232",
+    "thumbnail": "photos/_thumbnails/豆豆/IMG_1701.jpg"
   },
   {
-    "filename": "photos/IMG_1577.jpg",
-    "category": "",
+    "filename": "photos/小寶寶/IMG_1577.jpg",
+    "category": "小寶寶",
     "type": "image",
-    "date": "2025-07-04T12:16:30.219427"
+    "date": "2025-07-04T12:16:30.219427",
+    "thumbnail": "photos/_thumbnails/小寶寶/IMG_1577.jpg"
   },
   {
-    "filename": "photos/IMG_0807.JPG",
-    "category": "",
+    "filename": "photos/波波/IMG_0807.JPG",
+    "category": "波波",
     "type": "image",
-    "date": "2025-07-04T12:16:30.202531"
+    "date": "2025-07-04T12:16:30.202531",
+    "thumbnail": "photos/_thumbnails/波波/IMG_0807.jpg"
   },
   {
-    "filename": "photos/IMG_0762.JPG",
-    "category": "",
+    "filename": "photos/米米/IMG_0762.JPG",
+    "category": "米米",
     "type": "image",
-    "date": "2025-07-04T12:16:30.156879"
+    "date": "2025-07-04T12:16:30.156879",
+    "thumbnail": "photos/_thumbnails/米米/IMG_0762.jpg"
   },
   {
-    "filename": "photos/IMG_0006 2.jpg",
-    "category": "",
+    "filename": "photos/波波/IMG_0006.jpg",
+    "category": "波波",
     "type": "image",
-    "date": "2025-07-04T12:16:30.094340"
+    "date": "2025-07-04T12:16:30.094340",
+    "thumbnail": "photos/_thumbnails/波波/IMG_0006.jpg"
   },
   {
     "filename": "photos/米米/IMG_0822.JPG",
