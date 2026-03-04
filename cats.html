@@ -186,19 +186,6 @@
 
   <script src="js/components.js"></script>
   <script src="js/common.js"></script>
-  <script>
-    // 點擊卡片展開/收合詳細資訊
-    document.querySelectorAll('.cat-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A') return;
-        const wasExpanded = card.classList.contains('expanded');
-        card.classList.toggle('expanded');
-        const toggle = card.querySelector('.cat-card-toggle');
-        if (toggle) {
-          toggle.textContent = wasExpanded ? '查看詳細 ▾' : '收合 ▴';
-        }
-      });
-    });
-  </script>
+  <script src="js/cats.js"></script>
 </body>
 </html>

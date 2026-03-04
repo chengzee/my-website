@@ -25,6 +25,50 @@
   --radius: 12px;
   --radius-sm: 8px;
   --radius-pill: 20px;
+  color-scheme: light dark;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --primary: #5a9fd4;
+  --primary-hover: #7bb8e8;
+  --bg: #1a1a2e;
+  --card-bg: #222240;
+  --footer-bg: #12121f;
+  --text: #e0e0e0;
+  --text-light: #b0b0b0;
+  --text-muted: #808080;
+  --text-label: #999;
+  --border: #3a3a5c;
+  --border-light: #2e2e4a;
+  --border-input: #3a3a5c;
+  --accent-light: #1e2a4a;
+  --accent-blue: #5a9fd4;
+  --tag-bg: #2e2e4a;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: #5a9fd4;
+    --primary-hover: #7bb8e8;
+    --bg: #1a1a2e;
+    --card-bg: #222240;
+    --footer-bg: #12121f;
+    --text: #e0e0e0;
+    --text-light: #b0b0b0;
+    --text-muted: #808080;
+    --text-label: #999;
+    --border: #3a3a5c;
+    --border-light: #2e2e4a;
+    --border-input: #3a3a5c;
+    --accent-light: #1e2a4a;
+    --accent-blue: #5a9fd4;
+    --tag-bg: #2e2e4a;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-md: 0 6px 16px rgba(0,0,0,0.4);
+  }
 }
 
 /* --- Reset --- */
@@ -349,8 +393,14 @@ body.page-hero .site-header.scrolled {
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, opacity 0.4s ease;
   cursor: pointer;
+  background: var(--card-border, #e0e0e0);
+  opacity: 0;
+}
+
+.gallery img.loaded {
+  opacity: 1;
 }
 
 .gallery img:hover {
@@ -1183,6 +1233,117 @@ body.visitor-mode .admin-only-cell {
   color: #999;
   padding: 2rem;
   font-size: 1.1rem;
+}
+
+
+/* ============================
+   Dark Mode 元件覆蓋
+   ============================ */
+/* Header */
+[data-theme="dark"] .site-header,
+:root:not([data-theme="light"]) .site-header {
+  background-color: rgba(26, 26, 46, 0.95);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-header {
+    background-color: rgba(26, 26, 46, 0.95);
+  }
+  :root:not([data-theme="light"]) .site-header.scrolled {
+    background-color: rgba(26, 26, 46, 0.95);
+  }
+  :root:not([data-theme="light"]) .main-nav.open {
+    background-color: rgba(34, 34, 64, 0.98);
+  }
+  :root:not([data-theme="light"]) .main-nav a {
+    color: var(--primary) !important;
+  }
+  :root:not([data-theme="light"]) .filter-btn {
+    background: var(--card-bg);
+  }
+  :root:not([data-theme="light"]) .filter-btn:hover {
+    background: var(--accent-light);
+  }
+  :root:not([data-theme="light"]) .gallery img {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+  :root:not([data-theme="light"]) .diary-controls,
+  :root:not([data-theme="light"]) .summary-card,
+  :root:not([data-theme="light"]) .diary-form-card,
+  :root:not([data-theme="light"]) .diary-chart-container,
+  :root:not([data-theme="light"]) .diary-table-container {
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+  }
+  :root:not([data-theme="light"]) .diary-table th {
+    background: var(--accent-light);
+  }
+  :root:not([data-theme="light"]) .diary-table tbody tr:hover {
+    background: var(--accent-light);
+  }
+  :root:not([data-theme="light"]) .page-num {
+    background-color: var(--card-bg);
+  }
+}
+
+[data-theme="dark"] .site-header.scrolled {
+  background-color: rgba(26, 26, 46, 0.95);
+}
+[data-theme="dark"] .main-nav.open {
+  background-color: rgba(34, 34, 64, 0.98);
+}
+[data-theme="dark"] .main-nav a {
+  color: var(--primary) !important;
+}
+[data-theme="dark"] .filter-btn {
+  background: var(--card-bg);
+}
+[data-theme="dark"] .filter-btn:hover {
+  background: var(--accent-light);
+}
+[data-theme="dark"] .gallery img {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+[data-theme="dark"] .diary-controls,
+[data-theme="dark"] .summary-card,
+[data-theme="dark"] .diary-form-card,
+[data-theme="dark"] .diary-chart-container,
+[data-theme="dark"] .diary-table-container {
+  background: var(--card-bg);
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .diary-table th {
+  background: var(--accent-light);
+}
+[data-theme="dark"] .diary-table tbody tr:hover {
+  background: var(--accent-light);
+}
+[data-theme="dark"] .page-num {
+  background-color: var(--card-bg);
+}
+
+/* 深色模式切換按鈕 */
+.theme-toggle {
+  background: none;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-left: 0.5rem;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 

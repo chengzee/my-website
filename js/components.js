@@ -19,6 +19,7 @@ function loadHeader() {
         <a href="about.html">關於</a>
       </nav>
       <button class="nav-toggle" aria-label="選單" aria-expanded="false">☰</button>
+      <button class="theme-toggle" id="theme-toggle" aria-label="切換深色模式" title="切換深色模式">🌙</button>
     </div>
   </header>`;
 }

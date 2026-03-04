@@ -4,6 +4,37 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Dark Mode 切換 ---
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('theme');
+
+  // 初始化主題
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  }
+  updateThemeIcon();
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const isDark = current === 'dark' ||
+        (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const newTheme = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    });
+  }
+
+  function updateThemeIcon() {
+    if (!themeToggle) return;
+    const theme = document.documentElement.getAttribute('data-theme');
+    const isDark = theme === 'dark' ||
+      (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    themeToggle.title = isDark ? '切換淺色模式' : '切換深色模式';
+  }
+
   // --- Header scroll 行為（僅 hero 頁面） ---
   const header = document.querySelector('.site-header');
   const isHeroPage = document.body.classList.contains('page-hero');
@@ -47,3 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+// --- Service Worker 註冊 ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
