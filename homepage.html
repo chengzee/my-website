@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="吉米與他的貓貓小窩 - 用照片和文字記錄生活的個人網站" />
+  <meta property="og:title" content="吉米與他的貓貓小窩" />
+  <meta property="og:description" content="用照片和文字記錄生活的個人網站，認識我們的四隻貓貓：波波、米米、豆豆、小寶寶" />
+  <meta property="og:image" content="photos/_hero/IMG_0766.jpg" />
+  <meta property="og:type" content="website" />
   <title>吉米與他的貓貓小窩</title>
   <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="stylesheet" href="css/style.css" />
@@ -24,11 +28,13 @@
     <a class="button-link" href="photo-gallery.html">前往相片集 →</a>
   </section>
 
+  <main>
+
   <!-- 貓咪專區 -->
   <section class="section">
     <h2>我們的貓咪</h2>
     <div class="cards">
-      <a href="cats.html#bobo" class="card" style="text-decoration:none;color:inherit;">
+      <a href="cats.html#bobo" class="card">
         <img src="photos/_cards/bobo.jpg" alt="波波">
         <div class="card-body">
           <h3>世上只有波波好</h3>
@@ -43,14 +49,14 @@
   <section class="section">
     <h2>近期相簿 / 影片</h2>
     <div class="cards">
-      <a href="photo-gallery.html?cat=%E7%B1%B3%E7%B1%B3" class="card" style="text-decoration:none;color:inherit;">
+      <a href="photo-gallery.html?cat=%E7%B1%B3%E7%B1%B3" class="card">
         <img src="photos/_cards/mimi.jpg" alt="米米">
         <div class="card-body">
           <h3>你也想被米米眼神魅惑嗎？</h3>
           <p>歡慶米米 - 2024/05 生日</p>
         </div>
       </a>
-      <a href="photo-gallery.html?cat=%E8%B1%86%E8%B1%86" class="card" style="text-decoration:none;color:inherit;">
+      <a href="photo-gallery.html?cat=%E8%B1%86%E8%B1%86" class="card">
         <img src="photos/_cards/doudou.jpg" alt="豆豆">
         <div class="card-body">
           <h3>我再睡一下...</h3>
@@ -60,6 +66,7 @@
     </div>
     <a class="button-link" href="photo-gallery.html">前往影音列表 →</a>
   </section>
+  </main>
 
   <div id="site-footer"></div>
 
@@ -158,6 +165,11 @@
     let touchStartX = 0;
     let touchEndX = 0;
     const heroEl = document.querySelector('.hero');
+
+    // hover 時暫停輪播
+    heroEl.addEventListener('mouseenter', stopAutoplay);
+    heroEl.addEventListener('mouseleave', startAutoplay);
+
     heroEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
     heroEl.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;

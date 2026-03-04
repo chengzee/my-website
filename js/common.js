@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     navToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       mainNav.classList.toggle('open');
-      navToggle.textContent = mainNav.classList.contains('open') ? '✕' : '☰';
+      const isOpen = mainNav.classList.contains('open');
+      navToggle.textContent = isOpen ? '✕' : '☰';
+      navToggle.setAttribute('aria-expanded', isOpen);
     });
 
     // 點擊外部關閉選單
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!e.target.closest('.site-header')) {
         mainNav.classList.remove('open');
         navToggle.textContent = '☰';
+        navToggle.setAttribute('aria-expanded', 'false');
       }
     });
   }

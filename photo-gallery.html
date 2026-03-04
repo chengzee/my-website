@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="吉米與他的貓貓小窩 - 相片集" />
+  <meta property="og:title" content="相片集 - 吉米與他的貓貓小窩" />
+  <meta property="og:description" content="波波、米米、豆豆、小寶寶的可愛照片集" />
+  <meta property="og:image" content="photos/_hero/IMG_0766.jpg" />
+  <meta property="og:type" content="website" />
   <title>相片集 - 吉米與他的貓貓小窩</title>
   <link rel="icon" type="image/png" href="images/favicon.png" />
   <link rel="stylesheet" href="css/style.css" />
@@ -11,6 +15,8 @@
 <body>
 
   <div id="site-header"></div>
+
+  <main>
 
   <!-- Category Filter -->
   <section class="gallery-filter-section">
@@ -29,6 +35,7 @@
 
   <!-- Pagination -->
   <div class="pagination" id="pagination"></div>
+  </main>
 
   <!-- Lightbox -->
   <div class="lightbox-overlay" id="lightbox">
@@ -125,25 +132,57 @@
         gallery.appendChild(img);
       });
 
-      // 分頁按鈕
+      // 分頁按鈕（含頁碼快捷）
       if (totalPages > 1) {
+        // 上一頁
         if (page > 1) {
           const prev = document.createElement('a');
           prev.href = '#';
-          prev.textContent = '← 上一頁';
+          prev.textContent = '‹';
+          prev.className = 'page-arrow';
+          prev.title = '上一頁';
           prev.addEventListener('click', function(e) { e.preventDefault(); renderPage(page - 1); });
           pagination.appendChild(prev);
         }
 
-        const info = document.createElement('span');
-        info.textContent = ' 第 ' + page + ' / ' + totalPages + ' 頁 ';
-        info.style.cssText = 'display:flex;align-items:center;color:#666;font-size:0.9rem;';
-        pagination.appendChild(info);
+        // 計算要顯示的頁碼
+        const pages = [];
+        const neighbor = 2; // 當前頁左右各顯示幾個鄰居
+        pages.push(1);
+        let rangeStart = Math.max(2, page - neighbor);
+        let rangeEnd = Math.min(totalPages - 1, page + neighbor);
+        if (rangeStart > 2) pages.push('...');
+        for (let i = rangeStart; i <= rangeEnd; i++) pages.push(i);
+        if (rangeEnd < totalPages - 1) pages.push('...');
+        if (totalPages > 1) pages.push(totalPages);
 
+        pages.forEach(function(p) {
+          if (p === '...') {
+            const dots = document.createElement('span');
+            dots.className = 'page-dots';
+            dots.textContent = '…';
+            pagination.appendChild(dots);
+          } else {
+            const btn = document.createElement('a');
+            btn.href = '#';
+            btn.textContent = p;
+            btn.className = 'page-num' + (p === page ? ' active' : '');
+            if (p !== page) {
+              btn.addEventListener('click', function(e) { e.preventDefault(); renderPage(p); });
+            } else {
+              btn.addEventListener('click', function(e) { e.preventDefault(); });
+            }
+            pagination.appendChild(btn);
+          }
+        });
+
+        // 下一頁
         if (page < totalPages) {
           const next = document.createElement('a');
           next.href = '#';
-          next.textContent = '下一頁 →';
+          next.textContent = '›';
+          next.className = 'page-arrow';
+          next.title = '下一頁';
           next.addEventListener('click', function(e) { e.preventDefault(); renderPage(page + 1); });
           pagination.appendChild(next);
         }

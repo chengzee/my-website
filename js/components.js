@@ -18,7 +18,7 @@ function loadHeader() {
         <a href="articles.html">文章</a>
         <a href="about.html">關於</a>
       </nav>
-      <button class="nav-toggle" aria-label="選單">☰</button>
+      <button class="nav-toggle" aria-label="選單" aria-expanded="false">☰</button>
     </div>
   </header>`;
 }
