@@ -2,13 +2,14 @@
    Service Worker — Cache-First 策略
    快取 CSS / JS / 縮圖，提升載入速度
    ============================ */
-const CACHE_NAME = 'catsite-v1';
+const CACHE_NAME = 'catsite-v2';
 const PRECACHE_URLS = [
   '/',
   '/homepage.html',
   '/photo-gallery.html',
   '/cats.html',
   '/cat-diary.html',
+  '/game.html',
   '/articles.html',
   '/about.html',
   '/css/style.css',
@@ -18,6 +19,7 @@ const PRECACHE_URLS = [
   '/js/gallery.js',
   '/js/cats.js',
   '/js/diary.js',
+  '/js/game.js',
   '/js/vendor/chart.umd.min.js',
   '/images/favicon.png',
 ];

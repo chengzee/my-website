@@ -15,6 +15,7 @@ function loadHeader() {
         <a href="photo-gallery.html">相片集</a>
         <a href="cats.html">貓咪</a>
         <a href="cat-diary.html">飲食日記</a>
+        <a href="game.html">遊戲</a>
         <a href="articles.html">文章</a>
         <a href="about.html">關於</a>
       </nav>

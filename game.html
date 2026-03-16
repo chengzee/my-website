@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAB 工程師模擬器 — 吉米與他的貓貓小窩</title>
+    <meta name="description" content="半導體晶圓廠設備工程師模擬遊戲 — 修機台、寫報告、開會、接電話，在無盡的任務中守住你的獎金！">
+    <meta property="og:title" content="FAB 工程師模擬器">
+    <meta property="og:description" content="你是一名半導體 FAB 設備工程師，任務源源不絕，守住你的獎金！">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="site-header"></div>
+
+    <main class="game-container">
+        <!-- Start Screen -->
+        <div id="game-start" class="game-screen active">
+            <div class="game-intro">
+                <div class="game-logo">🏭</div>
+                <h2>FAB 工程師模擬器</h2>
+                <p class="game-tagline">
+                    你是一名半導體晶圓廠設備工程師。<br>
+                    接下來的 22 個工作天，任務源源不絕。<br>
+                    月底的考績就看你的表現了！
+                </p>
+                <div class="game-task-icons">
+                    <span title="修機台">🔧</span>
+                    <span title="寫報告">📋</span>
+                    <span title="接電話">📞</span>
+                    <span title="開會">🤝</span>
+                    <span title="緊急停機">🚨</span>
+                </div>
+                <button id="btn-start" class="btn-game-primary">▶ 開始上班</button>
+                <p class="game-highscore">🏆 最高紀錄：<span id="high-score">$0</span></p>
+            </div>
+        </div>
+
+        <!-- Playing Screen -->
+        <div id="game-play" class="game-screen">
+            <div class="game-hud">
+                <div class="hud-item hud-time">⏰ <span id="hud-time">08:00</span></div>
+                <div class="hud-item hud-day">📅 <span id="hud-day">1/22</span></div>
+                <div class="hud-item hud-bonus">💰 <span id="hud-bonus">$50,000</span></div>
+                <div class="hud-item hud-stats">✅<span id="hud-completed">0</span> ❌<span id="hud-failed">0</span></div>
+            </div>
+
+            <div class="game-day-progress">
+                <div id="day-progress-bar" class="day-progress-fill" style="width:0%"></div>
+            </div>
+            <div class="game-month-progress">
+                <div id="month-progress-bar" class="month-progress-fill" style="width:0%"></div>
+            </div>
+
+            <!-- Special event banner -->
+            <div id="special-event" class="special-event" style="display:none"></div>
+
+            <!-- Active Task -->
+            <div id="task-active-section" class="game-section" style="display:none">
+                <h3 class="game-section-title">⚙️ 正在處理</h3>
+                <div id="task-active" class="task-active"></div>
+            </div>
+
+            <!-- Task Queue -->
+            <div class="game-section">
+                <h3 class="game-section-title">📥 待處理任務 (<span id="queue-count">0</span>)</h3>
+                <div id="task-queue" class="task-queue"></div>
+                <p id="queue-empty" class="queue-empty">目前沒有待處理任務，享受片刻寧靜吧... ☕</p>
+            </div>
+
+            <!-- Event Log -->
+            <div class="game-section">
+                <h3 class="game-section-title">📜 事件紀錄</h3>
+                <div id="event-log" class="event-log">
+                    <div class="log-entry"><span class="log-time">08:00</span> 🏭 歡迎來到晶圓廠，祝你今天一切順利！</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day End Screen -->
+        <div id="game-end" class="game-screen">
+            <div class="game-summary">
+                <h2>📊 今日結算</h2>
+                <div id="summary-content"></div>
+                <div class="summary-actions">
+                    <button id="btn-next-day" class="btn-game-primary">☀️ 繼續下一天</button>
+                    <button id="btn-restart" class="btn-game-secondary">🔄 重新開始</button>
+                </div>
+                <p class="game-highscore">🏆 歷史最高：<span id="end-high-score">$0</span></p>
+            </div>
+        </div>
+
+        <!-- Month End / Performance Review Screen -->
+        <div id="game-month" class="game-screen">
+            <div class="game-summary month-end-summary">
+                <h2>📊 月底考績結算</h2>
+                <div id="month-content"></div>
+                <div class="summary-actions">
+                    <button id="btn-new-month" class="btn-game-primary">🔄 再來一個月</button>
+                </div>
+                <p class="game-highscore">🏆 歷史最高：<span id="month-high-score">$0</span></p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over" class="game-screen">
+            <div class="game-summary game-over-summary">
+                <div class="game-logo">💸</div>
+                <h2>GAME OVER</h2>
+                <p class="game-over-msg">你的獎金已經歸零...</p>
+                <div id="gameover-content"></div>
+                <div class="summary-actions">
+                    <button id="btn-gameover-restart" class="btn-game-primary">🔄 重新開始</button>
+                </div>
+                <p class="game-highscore">🏆 歷史最高：<span id="over-high-score">$0</span></p>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+    <script src="js/components.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

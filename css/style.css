@@ -1617,3 +1617,762 @@ body.visitor-mode .admin-only-cell {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ============================
+   FAB 工程師模擬器 — 遊戲頁面
+   ============================ */
+
+/* --- Game Container --- */
+.game-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 16px 40px;
+  min-height: 100vh;
+}
+
+/* --- Screen Switching --- */
+.game-screen {
+  display: none;
+}
+.game-screen.active {
+  display: block;
+  animation: gameFadeIn 0.3s ease;
+}
+@keyframes gameFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Start Screen --- */
+.game-intro {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.game-logo {
+  font-size: 5rem;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+}
+.game-intro h2 {
+  font-size: 2rem;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.game-tagline {
+  color: var(--text-light);
+  line-height: 1.8;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
+}
+.game-task-icons {
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.game-task-icons span {
+  transition: transform 0.2s;
+}
+.game-task-icons span:hover {
+  transform: scale(1.25);
+}
+.game-highscore {
+  color: var(--text-muted);
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+/* --- Game Buttons --- */
+.btn-game-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 14px 36px;
+  font-size: 1.15rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  font-weight: 600;
+}
+.btn-game-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+}
+.btn-game-primary:active {
+  transform: translateY(0);
+}
+.btn-game-secondary {
+  background: transparent;
+  color: var(--text-light);
+  border: 2px solid var(--border);
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-game-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* --- HUD (Heads-Up Display) --- */
+.game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  position: sticky;
+  top: 64px;
+  z-index: 50;
+  gap: 8px;
+}
+.hud-item {
+  white-space: nowrap;
+}
+.hud-bonus {
+  color: var(--primary);
+  font-size: 1.05rem;
+}
+.hud-bonus.bonus-warning {
+  color: #FF9800;
+}
+.hud-bonus.bonus-danger {
+  color: #F44336;
+  animation: hudPulse 1s ease infinite;
+}
+.hud-bonus.bonus-pulse {
+  animation: hudBounce 0.4s ease;
+}
+@keyframes hudPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+@keyframes hudBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* --- Day Progress Bar --- */
+.game-day-progress {
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+  margin: 8px 0 16px;
+  overflow: hidden;
+}
+.day-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #5cb85c);
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+
+/* --- Special Event Banner --- */
+.special-event {
+  background: #FFF8E1;
+  color: #6D4C00;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+  border: 1px solid #FFE082;
+  animation: gameFadeIn 0.4s ease;
+}
+
+/* --- Game Section --- */
+.game-section {
+  margin-bottom: 24px;
+}
+.game-section-title {
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* --- Task Queue (Grid) --- */
+.task-queue {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.queue-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px 16px;
+  font-style: italic;
+}
+
+/* --- Task Card --- */
+.task-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--border);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: cardSlideIn 0.3s ease;
+}
+.task-card:not(.disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.task-card.disabled {
+  opacity: 0.5;
+}
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+/* Type-specific border colors */
+.task-card[data-type="repair"]    { border-left-color: #336699; }
+.task-card[data-type="emergency"] { border-left-color: #F44336; }
+.task-card[data-type="call"]      { border-left-color: #FF9800; }
+.task-card[data-type="report"]    { border-left-color: #4CAF50; }
+.task-card[data-type="meeting"]   { border-left-color: #9C27B0; }
+
+.task-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.task-icon {
+  font-size: 1.2rem;
+}
+.task-type-label {
+  font-weight: 500;
+}
+.task-difficulty {
+  margin-left: auto;
+  font-size: 0.75rem;
+}
+.task-card-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.task-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+.task-reward {
+  color: #4CAF50;
+  font-weight: 600;
+}
+.task-timer-text {
+  color: var(--text-muted);
+}
+
+/* Timer bar */
+.timer-bar {
+  height: 4px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.timer-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s linear;
+}
+.timer-fill.safe    { background: #4CAF50; }
+.timer-fill.warning { background: #FF9800; }
+.timer-fill.urgent  { background: #F44336; animation: timerPulse 0.5s ease infinite; }
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.btn-accept {
+  width: 100%;
+  padding: 8px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.btn-accept:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+.btn-accept:disabled {
+  background: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* --- Active Task --- */
+.task-active {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+  animation: gameFadeIn 0.3s ease;
+}
+.active-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-light);
+  margin-bottom: 16px;
+}
+.active-header[data-type="repair"]    { border-bottom-color: #336699; }
+.active-header[data-type="emergency"] { border-bottom-color: #F44336; }
+.active-header[data-type="call"]      { border-bottom-color: #FF9800; }
+.active-header[data-type="report"]    { border-bottom-color: #4CAF50; }
+.active-header[data-type="meeting"]   { border-bottom-color: #9C27B0; }
+
+.active-timer {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+.active-timer.timer-critical {
+  color: #F44336;
+  font-weight: 700;
+  animation: hudPulse 0.8s ease infinite;
+}
+.active-step-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.task-narrative {
+  white-space: pre-line;
+  line-height: 1.8;
+  color: var(--text);
+  padding: 14px;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+.task-prompt {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+/* Task Options */
+.task-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.task-option {
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  line-height: 1.4;
+}
+.task-option:hover {
+  border-color: var(--primary);
+  background: var(--accent-light);
+  transform: translateX(4px);
+}
+.task-option:active {
+  transform: translateX(2px);
+}
+
+/* Task Response */
+.task-response {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  line-height: 1.7;
+  white-space: pre-line;
+  font-size: 0.95rem;
+}
+.task-response.correct { background: #E8F5E9; border-left: 4px solid #4CAF50; color: #2E7D32; }
+.task-response.partial { background: #FFF3E0; border-left: 4px solid #FF9800; color: #E65100; }
+.task-response.wrong   { background: #FFEBEE; border-left: 4px solid #F44336; color: #C62828; }
+.task-response.risky   { background: #FFF8E1; border-left: 4px solid #FFC107; color: #F57F17; }
+
+.btn-continue {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.btn-continue:hover {
+  background: var(--primary-hover);
+}
+
+/* --- Task Result --- */
+.task-result {
+  text-align: center;
+  padding: 24px 16px;
+}
+.result-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+}
+.result-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.result-dice {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+.result-bonus {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.result-bonus.positive { color: #4CAF50; }
+.result-bonus.negative { color: #F44336; }
+
+/* --- Event Log --- */
+.event-log {
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--card-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+.log-entry {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.log-entry:last-child {
+  border-bottom: none;
+}
+.log-time {
+  color: var(--text-muted);
+  margin-right: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Day End / Game Over --- */
+.game-summary {
+  max-width: 480px;
+  margin: 40px auto 0;
+  text-align: center;
+  padding: 32px 20px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+}
+.game-summary h2 {
+  font-size: 1.5rem;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.summary-total {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.summary-label {
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.summary-table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.summary-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+.summary-table .positive { color: #4CAF50; }
+.summary-table .negative { color: #F44336; }
+.summary-penalty td {
+  border-top: 2px solid var(--border);
+  font-weight: 600;
+}
+.summary-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.game-over-summary {
+  border-top: 4px solid #F44336;
+}
+.game-over-msg {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* --- Dark Mode: Game Overrides --- */
+[data-theme="dark"] .special-event {
+  background: #3A3520;
+  color: #FFE082;
+  border-color: #5A4B20;
+}
+[data-theme="dark"] .task-response.correct { background: #1B3A1B; color: #81C784; }
+[data-theme="dark"] .task-response.partial { background: #3A2E1B; color: #FFB74D; }
+[data-theme="dark"] .task-response.wrong   { background: #3A1B1B; color: #E57373; }
+[data-theme="dark"] .task-response.risky   { background: #3A351B; color: #FFF176; }
+[data-theme="dark"] .task-option:hover {
+  background: var(--accent-light);
+  border-color: var(--primary);
+}
+[data-theme="dark"] .task-narrative {
+  background: var(--accent-light);
+}
+
+/* --- RWD: Game 768px --- */
+@media (max-width: 768px) {
+  .game-container {
+    padding: 70px 12px 32px;
+  }
+  .game-hud {
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    gap: 6px;
+    top: 56px;
+  }
+  .hud-bonus {
+    font-size: 0.95rem;
+  }
+  .task-queue {
+    grid-template-columns: 1fr;
+  }
+  .game-intro {
+    padding: 40px 16px;
+  }
+  .game-intro h2 {
+    font-size: 1.6rem;
+  }
+  .game-task-icons {
+    font-size: 1.5rem;
+    gap: 12px;
+  }
+  .summary-actions {
+    flex-direction: column;
+  }
+  .summary-actions button {
+    width: 100%;
+  }
+}
+
+/* --- RWD: Game 480px --- */
+@media (max-width: 480px) {
+  .game-logo {
+    font-size: 3.5rem;
+  }
+  .game-intro h2 {
+    font-size: 1.3rem;
+  }
+  .game-tagline {
+    font-size: 0.95rem;
+  }
+  .task-active {
+    padding: 14px;
+  }
+  .active-header {
+    font-size: 0.9rem;
+  }
+  .task-option {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  .result-bonus {
+    font-size: 1.5rem;
+  }
+  .summary-total {
+    font-size: 2rem;
+  }
+}
+
+/* --- Month Progress Bar --- */
+.game-month-progress {
+  height: 4px;
+  background: var(--card-border, #e0e0e0);
+  border-radius: 2px;
+  margin: 0 0 10px;
+}
+.month-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #FFD700);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* --- Month-End Summary --- */
+.month-end-summary .rating-badge {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+.month-end-summary .rating-grade {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.month-end-summary .rating-desc {
+  font-size: 1.1rem;
+  color: var(--text-secondary, #666);
+  margin-bottom: 20px;
+}
+.month-end-summary .rating-stats {
+  background: var(--bg, #f8f8f8);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+.month-end-summary .rating-stats p {
+  margin: 6px 0;
+}
+.month-end-summary .rating-thresholds {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+  margin-top: 16px;
+}
+
+/* --- Month Days Grid --- */
+.month-days-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 6px;
+  margin: 16px 0;
+}
+.month-day-cell {
+  text-align: center;
+  padding: 6px 2px;
+  border-radius: 6px;
+  border: 2px solid;
+  background: var(--card-bg, #fff);
+  font-size: 0.8rem;
+}
+.month-day-num {
+  display: block;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+}
+.month-day-rate {
+  display: block;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* --- Summary Month Status (Day End) --- */
+.summary-month-status {
+  background: var(--bg, #f8f8f8);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 16px;
+  text-align: center;
+}
+.summary-month-status p {
+  margin: 6px 0;
+}
+.summary-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #666);
+}
+
+/* --- Mini Chart (Daily Performance Bars) --- */
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 60px;
+  margin: 10px 0;
+}
+.mini-bar {
+  width: 12px;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+/* --- Summary Penalty Row --- */
+.summary-penalty td {
+  border-top: 1px solid var(--card-border, #e0e0e0);
+  padding-top: 8px;
+}
+
+/* --- Dark Mode: Month-End additions --- */
+[data-theme="dark"] .month-end-summary .rating-stats {
+  background: var(--bg);
+}
+[data-theme="dark"] .summary-month-status {
+  background: var(--bg);
+}
+[data-theme="dark"] .month-day-cell {
+  background: var(--card-bg);
+}
+
+/* --- RWD: Month-End 768px --- */
+@media (max-width: 768px) {
+  .month-days-grid {
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+    gap: 4px;
+  }
+  .month-end-summary .rating-grade {
+    font-size: 1.6rem;
+  }
+}
+
+/* --- RWD: Month-End 480px --- */
+@media (max-width: 480px) {
+  .month-days-grid {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  }
+  .month-end-summary .rating-badge {
+    font-size: 3rem;
+  }
+  .month-end-summary .rating-grade {
+    font-size: 1.3rem;
+  }
+  .mini-bar {
+    width: 8px;
+  }
+}
